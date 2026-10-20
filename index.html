@@ -23,13 +23,43 @@ button,select{font:inherit}button:focus-visible,select:focus-visible{outline:3px
 [hidden]{display:none!important}
 @media(max-width:390px){body{padding:18px 10px 26px}.settings{gap:8px}.field select{font-size:.85rem;padding:10px 7px}.panel{border-radius:22px}.board{gap:7px}.cell{border-radius:13px}.actions{grid-template-columns:1fr 1fr}.actions .primary{grid-column:1/-1}.topline{margin-bottom:14px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
-</style>
+
+/* Arcade game hub + Brick Breaker */
+.game-tabs{display:flex;gap:9px;margin:0 0 15px;padding:6px;background:#1b1229;border:1px solid #49345f;border-radius:17px}
+.game-tab{flex:1;border:1px solid transparent;border-radius:12px;padding:11px 8px;background:transparent;color:var(--muted);font-weight:950;font-size:.82rem;cursor:pointer;transition:background .18s,transform .18s}
+.game-tab[aria-pressed="true"]{background:linear-gradient(110deg,var(--yellow),#ffb76a);color:#25142d;box-shadow:0 3px 0 #9b5a43}
+.game-tab:hover{transform:translateY(-1px)}
+.arcade-section{margin-top:0}
+.brick-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px}
+.brick-title{font-size:1.35rem;font-weight:1000;letter-spacing:-.04em;margin:0}
+.brick-sub{font-size:.78rem;color:var(--muted);margin:5px 0 0}
+.brick-level{background:#161020;border:1px solid #59416e;border-radius:999px;padding:7px 10px;color:var(--yellow);font-size:.72rem;font-weight:900;white-space:nowrap}
+.brick-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.brick-stat{background:#171126;border:1px solid #4b375e;border-radius:13px;padding:9px 6px;text-align:center}
+.brick-stat strong{display:block;font-size:1.2rem;color:var(--yellow);font-variant-numeric:tabular-nums}
+.brick-stat small{display:block;color:var(--muted);font-size:.65rem;font-weight:850;letter-spacing:.06em;margin-top:3px}
+.brick-canvas-wrap{position:relative;overflow:hidden;border:1px solid #59416e;border-radius:17px;background:#100b1b;touch-action:none}
+#brickCanvas{display:block;width:100%;height:auto;aspect-ratio:1.18;cursor:none;touch-action:none}
+.brick-overlay{position:absolute;inset:0;display:grid;place-items:center;padding:18px;text-align:center;background:#100b1bc9;backdrop-filter:blur(5px)}
+.brick-overlay[hidden]{display:none}
+.brick-overlay-card{max-width:270px}
+.brick-overlay h3{margin:0 0 8px;color:var(--yellow);font-size:1.7rem;letter-spacing:-.04em}
+.brick-overlay p{margin:0 0 15px;color:#d3c3e2;font-size:.85rem;line-height:1.5}
+.brick-controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.brick-hint{color:var(--muted);font-size:.7rem;line-height:1.5;margin:12px 2px 0}
+.brick-paddle-touch{display:none}
+@media(max-width:390px){.game-tab{font-size:.74rem;padding:10px 4px}.brick-title{font-size:1.15rem}.brick-controls{grid-template-columns:1fr 1fr}.brick-controls .primary{grid-column:1/-1}}
+\n</style>
 </head>
 <body>
 <main class="app">
   <div class="topline"><div class="brand">TM <span>STUDIO</span></div><div class="pill">ARCADE EDITION <span class="spark">✦</span></div></div>
   <header class="hero"><div class="eyebrow"><span class="spark">✦</span> Ready, set, think!</div><h1><span class="tic">TIC</span> <span class="tac">TAC</span><br><span class="toe">TOE!</span></h1><p class="sub">Tiny board. Big brain energy.</p></header>
-  <section class="panel" aria-label="Tic Tac Toe game">
+  <div class="game-tabs" role="group" aria-label="Choose arcade game">
+    <button class="game-tab" id="tabTtt" aria-pressed="true">✕ Tic-Tac-Toe</button>
+    <button class="game-tab" id="tabBrick" aria-pressed="false">▦ Brick Breaker</button>
+  </div>
+  <section class="panel" id="tttGame" aria-label="Tic Tac Toe game">
     <div class="settings">
       <div class="field"><label for="mode">Game mode</label><select id="mode"><option value="ai">🤖 vs AI</option><option value="local">👥 2 Players</option></select></div>
       <div class="field"><label for="boardMode">Board mode</label><select id="boardMode"><option value="classic">Classic 3 × 3</option><option value="mega">Mega 4 × 4</option></select></div>
@@ -46,6 +76,22 @@ button,select{font:inherit}button:focus-visible,select:focus-visible{outline:3px
     <div class="meta"><span>🔥 Streak: <b class="streak" id="streak">0</b></span><span id="roundInfo">Round 1 · First to 3?</span></div>
     <div class="actions"><button class="btn primary" id="restart">↻ New Round</button><button class="btn secondary" id="undo">↶ Undo</button><button class="btn secondary" id="reset">Reset Stats</button></div>
     <div class="tinyactions"><button class="tiny" id="sound" aria-pressed="false">♫ Sound: Off</button><button class="tiny" id="theme">✦ Switch Colors</button></div>
+  </section>
+  <section class="panel arcade-section" id="brickGame" aria-label="Brick Breaker arcade game" hidden>
+    <div class="brick-head"><div><h2 class="brick-title">▦ BRICK BREAKER</h2><p class="brick-sub">Bounce. Break. Level up.</p></div><div class="brick-level" id="brickLevel">LEVEL 1</div></div>
+    <div class="brick-stats">
+      <div class="brick-stat"><strong id="brickScore">0</strong><small>SCORE</small></div>
+      <div class="brick-stat"><strong id="brickLives">3</strong><small>LIVES</small></div>
+      <div class="brick-stat"><strong id="brickBest">0</strong><small>BEST</small></div>
+    </div>
+    <div class="brick-canvas-wrap" id="brickWrap">
+      <canvas id="brickCanvas" width="600" height="510" aria-label="Brick Breaker game field"></canvas>
+      <div class="brick-overlay" id="brickOverlay">
+        <div class="brick-overlay-card"><h3 id="brickOverlayTitle">READY?</h3><p id="brickOverlayText">Move the paddle, keep the ball in play, and smash every brick.</p><button class="btn primary" id="brickOverlayBtn">▶ Start Game</button></div>
+      </div>
+    </div>
+    <div class="brick-controls"><button class="btn primary" id="brickStart">▶ Start / Resume</button><button class="btn secondary" id="brickPause">Ⅱ Pause</button><button class="btn secondary" id="brickRestart">↻ Restart</button></div>
+    <p class="brick-hint">Controls: move your mouse over the board, drag on touch screens, or use ← → / A D keys. Catch the glowing power-ups for a wider paddle.</p>
   </section>
   <footer class="footer"><span><strong>TM STUDIO</strong> · THINK DIFFERENT</span><span class="badge" id="saveStatus">● Stats saved on this device</span></footer>
 </main>
@@ -89,5 +135,44 @@ $('theme').addEventListener('click',()=>{themeIndex=(themeIndex+1)%themes.length
 syncSettings();persist();
 })();
 </script>
-</body>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id), tabTtt=$('tabTtt'),tabBrick=$('tabBrick'),ttt=$('tttGame'),brick=$('brickGame');
+function switchGame(which){const isBrick=which==='brick';ttt.hidden=isBrick;brick.hidden=!isBrick;tabTtt.setAttribute('aria-pressed',String(!isBrick));tabBrick.setAttribute('aria-pressed',String(isBrick));if(isBrick){drawIdle();}else{stopLoop();}}
+tabTtt.addEventListener('click',()=>switchGame('ttt'));tabBrick.addEventListener('click',()=>switchGame('brick'));
+const canvas=$('brickCanvas'),ctx=canvas.getContext('2d'),wrap=$('brickWrap'),overlay=$('brickOverlay');
+const W=600,H=510;let running=false,over=false,raf=0,last=0,score=0,lives=3,level=1,best=0,paddle={x:250,y:472,w:100,h:12},balls=[],bricks=[],drops=[],keys={left:false,right:false},lastDrop=0;
+try{best=Number(localStorage.getItem('tm-brick-best')||0)}catch(e){}$('brickBest').textContent=best;
+const palette=['#ff5db1','#ffe66d','#64e8ff','#8cffb7','#b18cff'];
+function setupLevel(){bricks=[];const rows=Math.min(3+level,6),cols=9,gap=7,bw=(W-42-gap*(cols-1))/cols,bh=18;for(let r=0;r<rows;r++)for(let col=0;col<cols;col++)bricks.push({x:21+col*(bw+gap),y:45+r*(bh+8),w:bw,h:bh,hp:level>2&&r<2?2:1,color:palette[(r+level-1)%palette.length],alive:true});}
+function resetGame(){stopLoop();score=0;lives=3;level=1;over=false;running=false;last=0;drops=[];paddle={x:(W-100)/2,y:472,w:100,h:12};balls=[{x:W/2,y:440,r:7,vx:3.1,vy:-4.1,stuck:true}];setupLevel();updateStats();showOverlay('READY?','Move the paddle and break every brick. Keep the ball in play!','▶ Start Game');drawIdle();}
+function updateStats(){$('brickScore').textContent=score;$('brickLives').textContent=lives;$('brickLevel').textContent='LEVEL '+level;$('brickBest').textContent=best;}
+function showOverlay(title,msg,button){$('brickOverlayTitle').textContent=title;$('brickOverlayText').textContent=msg;$('brickOverlayBtn').textContent=button;overlay.hidden=false;}
+function hideOverlay(){overlay.hidden=true}
+function startGame(){if(over)resetGame();running=true;over=false;hideOverlay();if(balls.length===0)balls=[{x:W/2,y:440,r:7,vx:3.1,vy:-4.1,stuck:true}];balls.forEach(b=>{if(b.stuck){b.stuck=false;b.vx=(Math.random()>.5?1:-1)*3.1;b.vy=-4.1}});last=performance.now();if(!raf)raf=requestAnimationFrame(loop);}
+function stopLoop(){running=false;if(raf){cancelAnimationFrame(raf);raf=0}last=0}
+function finish(title,msg){stopLoop();over=true;showOverlay(title,msg,'↻ Play Again')}
+function movePaddle(x){const rect=canvas.getBoundingClientRect();paddle.x=Math.max(0,Math.min(W-paddle.w,(x-rect.left)/rect.width*W-paddle.w/2));}
+canvas.addEventListener('pointermove',e=>{movePaddle(e.clientX);if(!running&&!over&&balls[0]){balls[0].x=paddle.x+paddle.w/2;drawIdle()}});
+canvas.addEventListener('pointerdown',e=>{movePaddle(e.clientX);if(!running&&!over){startGame()}});
+canvas.addEventListener('pointerleave',()=>{});
+window.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();keys[e.key==='ArrowLeft'?'left':'right']=true}if((e.key===' '||e.key==='Enter')&&!brick.hidden&&!running&&!over){e.preventDefault();startGame()}});
+window.addEventListener('keyup',e=>{if(e.key==='ArrowLeft')keys.left=false;if(e.key==='ArrowRight')keys.right=false});
+$('brickOverlayBtn').addEventListener('click',startGame);$('brickStart').addEventListener('click',startGame);$('brickPause').addEventListener('click',()=>{if(running){stopLoop();showOverlay('PAUSED','Take a breather. Your progress is safe for this round.','▶ Resume')}else if(!over)startGame()});$('brickRestart').addEventListener('click',resetGame);
+function drawBackground(){const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#1c1230');g.addColorStop(1,'#0c0915');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.save();ctx.globalAlpha=.13;ctx.strokeStyle='#a990c4';ctx.lineWidth=1;for(let x=0;x<W;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}for(let y=0;y<H;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}ctx.restore();}
+function roundRect(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,r?Math.min(r,w/2,h/2):0);ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1.5;ctx.stroke()}}
+function draw(){drawBackground();bricks.forEach(b=>{if(!b.alive)return;ctx.save();ctx.shadowBlur=12;ctx.shadowColor=b.color;roundRect(b.x,b.y,b.w,b.h,5,b.color,b.hp>1?'#fff4':'');ctx.shadowBlur=0;if(b.hp>1){ctx.fillStyle='#24132f';ctx.font='bold 11px system-ui';ctx.textAlign='center';ctx.fillText('2',b.x+b.w/2,b.y+13)}ctx.restore()});drops.forEach(d=>{ctx.save();ctx.shadowBlur=12;ctx.shadowColor='#8cffb7';ctx.fillStyle='#8cffb7';ctx.beginPath();ctx.roundRect(d.x-8,d.y-8,16,16,5);ctx.fill();ctx.fillStyle='#13231d';ctx.font='bold 10px system-ui';ctx.textAlign='center';ctx.fillText('W',d.x,d.y+3);ctx.restore()});ctx.save();ctx.shadowBlur=20;ctx.shadowColor='#64e8ff';const pg=ctx.createLinearGradient(paddle.x,paddle.y,paddle.x+paddle.w,paddle.y);pg.addColorStop(0,'#64e8ff');pg.addColorStop(1,'#b18cff');roundRect(paddle.x,paddle.y,paddle.w,paddle.h,7,pg);ctx.restore();balls.forEach(b=>{ctx.save();ctx.shadowBlur=22;ctx.shadowColor='#ffe66d';const g=ctx.createRadialGradient(b.x-2,b.y-2,1,b.x,b.y,b.r+2);g.addColorStop(0,'#fffbd0');g.addColorStop(1,'#ffe66d');ctx.fillStyle=g;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();ctx.restore()});ctx.fillStyle='#cbb9dc';ctx.font='800 11px system-ui';ctx.fillText('TM ARCADE',15,H-12);}
+function drawIdle(){if(!brick.hidden)draw()}
+function hitBall(b){if(b.x-b.r<0){b.x=b.r;b.vx=Math.abs(b.vx)}if(b.x+b.r>W){b.x=W-b.r;b.vx=-Math.abs(b.vx)}if(b.y-b.r<0){b.y=b.r;b.vy=Math.abs(b.vy)}if(b.vy>0&&b.y+b.r>=paddle.y&&b.y-b.r<=paddle.y+paddle.h&&b.x>=paddle.x&&b.x<=paddle.x+paddle.w){const rel=(b.x-(paddle.x+paddle.w/2))/(paddle.w/2);b.vx=rel*5.2;b.vy=-Math.max(3.5,Math.sqrt(Math.max(12,Math.pow(b.vx,2)+Math.pow(b.vy,2)-1)));b.y=paddle.y-b.r-1}
+for(const brick of bricks){if(!brick.alive)continue;if(b.x+b.r>brick.x&&b.x-b.r<brick.x+brick.w&&b.y+b.r>brick.y&&b.y-b.r<brick.y+brick.h){brick.hp--;if(brick.hp<=0){brick.alive=false;score+=10; if(Math.random()<.12)drops.push({x:brick.x+brick.w/2,y:brick.y+brick.h,vy:2.3})}else score+=3;b.vy*=-1;break}}
+}
+function update(dt){const scale=Math.min(1.8,dt/16.67);if(keys.left)paddle.x=Math.max(0,paddle.x-6.5*scale);if(keys.right)paddle.x=Math.min(W-paddle.w,paddle.x+6.5*scale);balls.forEach(b=>{if(b.stuck){b.x=paddle.x+paddle.w/2;return}b.x+=b.vx*scale;b.y+=b.vy*scale;hitBall(b)});drops=drops.filter(d=>{d.y+=d.vy*scale;if(d.y>=paddle.y-3&&d.y<=paddle.y+paddle.h&&d.x>=paddle.x&&d.x<=paddle.x+paddle.w){paddle.w=Math.min(150,paddle.w+22);paddle.x=Math.min(W-paddle.w,paddle.x);return false}return d.y<H+15});if(balls.length&&balls.every(b=>b.y-b.r>H)){lives--;updateStats();if(lives<=0){finish('GAME OVER','Final score: '+score+'. Best score: '+best+'. Try another run!');return}else{balls=[{x:paddle.x+paddle.w/2,y:paddle.y-18,r:7,vx:0,vy:0,stuck:true}];stopLoop();showOverlay('OOPS!','You have '+lives+' lives left. Ready to launch again?','▶ Continue');return}}
+if(bricks.every(b=>!b.alive)){level++;score+=50;setupLevel();paddle.w=100;balls=[{x:paddle.x+paddle.w/2,y:paddle.y-18,r:7,vx:(Math.random()>.5?1:-1)*(3+level*.15),vy:-4-level*.15,stuck:false}];showOverlay('LEVEL '+level+'!','All bricks cleared! Bonus +50. Next wave is faster.','▶ Continue');stopLoop();return}
+if(score>best){best=score;try{localStorage.setItem('tm-brick-best',String(best))}catch(e){}}updateStats();}
+function loop(now){raf=0;if(!running||brick.hidden)return;const dt=Math.min(32,now-(last||now));last=now;update(dt);draw();if(running)raf=requestAnimationFrame(loop)}
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&running){stopLoop();showOverlay('PAUSED','Game paused while this tab is in the background.','▶ Resume')}});
+resetGame();
+})();
+</script>\n</body>
 </html>
