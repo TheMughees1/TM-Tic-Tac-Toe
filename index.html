@@ -74,12 +74,130 @@ button,select{font:inherit}button:focus-visible,select:focus-visible{outline:3px
 #snakeArcade .stage-guide{margin:23px 0 0;padding:0 3px}#snakeArcade .stage-guide>.eyebrow{margin:0 0 11px 3px}#snakeArcade .stage-guide-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}#snakeArcade .stage-guide-grid>div{display:flex;flex-direction:column;gap:5px;min-width:0;padding:11px 9px;border:1px solid #ffffff10;border-radius:13px;background:#ffffff04}#snakeArcade .stage-guide-grid span{font-size:20px}#snakeArcade .stage-guide-grid strong{font-size:10px}#snakeArcade .stage-guide-grid small{font-size:9px;color:var(--muted);line-height:1.4}#snakeArcade footer{text-align:center;color:#7588a4;font-size:11px;padding:23px 0}#snakeArcade footer span{padding:0 7px;color:#4c5e77}#snakeArcade footer a{color:var(--green);text-decoration:none;font-weight:750}#snakeArcade footer a:hover{text-decoration:underline}
 @media(max-width:560px){#snakeArcade{padding:16px 11px}#snakeArcade .difficulty-row{margin-bottom:10px}#snakeArcade .difficulty-row select{padding:8px 18px 8px 8px}#snakeArcade .topbar{padding-bottom:24px}#snakeArcade .topbar>.eyebrow{font-size:8px;padding:8px}#snakeArcade .game-card{padding:12px;border-radius:20px}#snakeArcade .mobile-controls{display:flex}#snakeArcade .game-controls{gap:6px;flex-wrap:wrap}#snakeArcade .game-controls p{flex-basis:100%;margin-bottom:5px;font-size:10px}#snakeArcade .secondary-btn{flex:1;padding:11px 7px}#snakeArcade .stats strong{font-size:19px}#snakeArcade .level-stat strong{font-size:16px}#snakeArcade .stat-label{font-size:8px;letter-spacing:.1em}#snakeArcade .hint{font-size:8px}#snakeArcade .intro{margin-bottom:19px}#snakeArcade .stage-guide-grid{grid-template-columns:repeat(3,1fr)}#snakeArcade .stage-guide-grid>div{padding:9px}#snakeArcade .stage-banner{padding:9px}#snakeArcade .toast{max-width:94%;white-space:normal;width:max-content}#snakeArcade .toast small{display:none}}
 @media(prefers-reduced-motion:reduce){#snakeArcade *,#snakeArcade *::before,#snakeArcade *::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+/* === TM ARCADE UI POLISH === */
+:root{--bg:#080d18;--panel:#101a2b;--panel2:#142239;--line:#293b55;--text:#f4f7ff;--muted:#9eafc9;--pink:#ff6f91;--yellow:#ffd166;--blue:#6be7ff;--green:#8cf0bd;--shadow:0 24px 70px #020611a8}
+body{padding:30px 18px 42px;background:radial-gradient(ellipse at 8% 0%,#18345a80,transparent 34%),radial-gradient(ellipse at 96% 78%,#39204d60,transparent 34%),#080d18;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body:before{opacity:.1;background-size:30px 30px}
+.app{width:min(100%,1080px)}
+.topline{margin-bottom:24px}
+.brand{color:#d7eaff;font-size:.78rem;letter-spacing:.22em}
+.brand span{color:var(--blue)}
+.pill{border-color:#2b4260;background:#0d1728;color:#a8bad4}
+.arcade-hero{margin:0 auto 25px}
+.arcade-hero h1{font-size:clamp(2.8rem,8vw,5.5rem);letter-spacing:-.075em;text-shadow:0 8px 36px #4ea8ff20;margin:16px 0 12px}
+.arcade-hero h1 .tic{color:#eef5ff}.arcade-hero h1 .tac{color:#7bdcff}.arcade-hero h1 .toe{color:#a99bff}
+.eyebrow{border-color:#2b4969;background:#102239;color:#a8e9ff;letter-spacing:.15em}
+.sub{color:#9eafc9;font-size:1rem}
+.game-tabs{max-width:100%;gap:8px;margin:0 0 18px;padding:7px;background:#0c1524;border:1px solid #263852;border-radius:18px;box-shadow:0 12px 35px #02061155}
+.game-tab{min-height:46px;border-radius:12px;padding:12px 10px;color:#a6b6ce;font-size:.83rem;letter-spacing:.005em}
+.game-tab[aria-pressed="true"]{background:linear-gradient(135deg,#b7edff,#6bd5f6);color:#071323;box-shadow:0 3px 0 #347d9a}
+.game-tab:hover{background-color:#192a41;color:#f4f7ff}
+.game-tab[aria-pressed="true"]:hover{color:#071323}
+.panel{background:linear-gradient(145deg,#111d30f7,#0c1423f8);border:1px solid #2b405c;border-radius:24px;padding:clamp(16px,3vw,26px);box-shadow:0 25px 75px #01040b85}
+.panel:before{left:12%;right:12%;background:linear-gradient(90deg,transparent,#65ddff,#a99bff,#ff91b7,transparent);opacity:.8}
+#tttGame{max-width:610px}
+.settings{gap:12px}
+.field select,.brick-extra-controls select,#snakeArcade select{border-color:#304766;background:#0a1423;color:#edf5ff;border-radius:12px;min-height:42px}
+.score{background:#0b1525;border-color:#293e59;border-radius:15px}
+.statusrow{margin-top:3px}
+.board{gap:10px}
+.cell{background:linear-gradient(145deg,#172942,#101d31);border-color:#2c4565;border-radius:16px;box-shadow:inset 0 -3px 0 #030812aa,0 5px 12px #02061140}
+.cell:enabled:hover{border-color:#7bdcff;box-shadow:0 5px 0 #070e19,inset 0 0 22px #6be7ff12}
+.cell.win{background:linear-gradient(145deg,#1d514b,#173c49);border-color:#8cf0bd}
+.actions .btn,.brick-controls .btn,.shooter-controls .btn{min-height:44px}
+.btn{border-radius:12px;letter-spacing:.01em}
+.primary{background:linear-gradient(135deg,#c3f1ff,#6bd5f6);color:#071323;box-shadow:0 3px 0 #357d99}
+.secondary{background:#14233a;border-color:#304968;color:#e9f2ff}
+.tiny{border-color:#2a3e59;color:#a9bbd4}
+#brickGame,#shooterGame{max-width:100%}
+.brick-head,.shooter-head{align-items:center;margin-bottom:18px}
+.brick-title,.shooter-title{font-size:clamp(1.45rem,3vw,2rem);letter-spacing:-.045em}
+.brick-sub,.shooter-sub{color:#9eafc9;font-size:.84rem;line-height:1.5}
+.brick-level{border:1px solid #31516f;background:#102239;color:#a8e9ff;border-radius:999px;padding:9px 13px;font-weight:900;white-space:nowrap}
+.brick-stats,.shooter-stats{gap:10px;margin:16px 0}
+.brick-stat,.shooter-stat{background:linear-gradient(145deg,#111f33,#0a1423);border-color:#2a405e;border-radius:14px;padding:13px 10px}
+.brick-stat strong,.shooter-stat strong{font-size:clamp(1.3rem,3vw,1.8rem)}
+.brick-mission{border-color:#2a405e;background:#0b1524;border-radius:13px}
+.brick-canvas-wrap,.shooter-wrap{border:1px solid #2c4564;border-radius:16px;background:#050b16;box-shadow:inset 0 0 30px #0008,0 10px 30px #02061155}
+#brickCanvas{aspect-ratio:1.35;min-height:390px;max-height:740px}
+.shooter-canvas{aspect-ratio:1.5}
+.brick-overlay,.shooter-overlay{background:#050b16cc;backdrop-filter:blur(9px)}
+.brick-overlay-card,.shooter-overlay-card{background:linear-gradient(145deg,#13233aee,#0b1424f5);border:1px solid #395776;border-radius:20px;box-shadow:0 25px 80px #0009}
+.brick-overlay-card h3,.shooter-overlay-card h3{color:#eaf8ff;letter-spacing:.08em}
+.brick-overlay-card p,.shooter-overlay-card p{color:#a7bbd5;line-height:1.7}
+.brick-controls,.shooter-controls{gap:9px;margin-top:14px}
+.brick-controls .btn{flex:1}
+.brick-extra-controls{gap:10px}
+.brick-extra-controls label{background:#0b1524;border-color:#293f5b;border-radius:12px;padding:10px 12px}
+.brick-achievements{gap:10px;margin-top:13px}
+.brick-achievements>div{background:#0b1524;border-color:#293f5b;border-radius:13px;padding:12px}
+.brick-hint,.shooter-hint{color:#91a5c1;line-height:1.7}
+.shooter-mobile button{background:#102139;border-color:#2d4b6e;color:#eaf8ff;min-height:52px;border-radius:13px}
+#snakeArcade{width:100%;max-width:none;margin:0;padding:0;background:transparent;border:0;border-radius:0;box-shadow:none;color:#f4f7ff;font-family:Inter,ui-sans-serif,system-ui,sans-serif}
+#snakeArcade:before{display:none}
+#snakeArcade .topbar{margin-bottom:20px}
+#snakeArcade .intro{margin:12px 0 22px}
+#snakeArcade .intro h1{font-size:clamp(2rem,5vw,3.4rem);letter-spacing:-.06em;text-shadow:none;margin:10px 0}
+#snakeArcade .intro h1 span{color:#7bdcff}
+#snakeArcade .subtitle{color:#9eafc9;line-height:1.65}
+#snakeArcade .game-card{background:linear-gradient(145deg,#111f33,#0b1423);border-color:#2b405c;border-radius:20px;box-shadow:0 18px 45px #02061166;padding:clamp(12px,2.5vw,22px)}
+#snakeArcade .stats>div{background:#0b1524;border-color:#293e59;border-radius:13px;padding:12px 10px}
+#snakeArcade .stat-label{color:#9eafc9}
+#snakeArcade .difficulty-row{border-color:#293e59;background:#0b1524;border-radius:12px;padding:11px 13px}
+#snakeArcade .stage-banner{background:linear-gradient(110deg,#142a3c,#17223a);border-color:#2e4b68;border-radius:14px}
+#snakeArcade .canvas-wrap{border-color:#2e4564;border-radius:15px;background:#07111f;box-shadow:inset 0 0 28px #0008}
+#snakeArcade .overlay{background:#07111fd9;backdrop-filter:blur(8px)}
+#snakeArcade .overlay h2{color:#edf7ff}
+#snakeArcade .overlay p{color:#a7bbd5;line-height:1.7}
+#snakeArcade .primary-btn{background:linear-gradient(135deg,#c3f1ff,#6bd5f6);color:#071323;border-radius:12px;box-shadow:0 3px 0 #357d99}
+#snakeArcade .secondary-btn,#snakeArcade .mobile-controls button{background:#14233a;border-color:#304968;color:#eaf2ff;border-radius:12px}
+#snakeArcade .lifetime-stats span{background:#0b1524;border-color:#293e59;border-radius:10px}
+#snakeArcade .stage-track{background:#0b1524;border-color:#293e59;border-radius:12px}
+#snakeArcade .stage-guide{margin-top:20px;padding:18px;background:#0d1829;border:1px solid #263b56;border-radius:18px}
+#snakeArcade .stage-guide-grid>div{background:#101f33;border-color:#293e59;border-radius:12px;padding:12px}
+#snakeArcade footer{color:#8da2bf}
+.footer{color:#8294b0}
+.footer strong{color:#bfd7f2}
+@media(max-width:700px){
+ body{padding:18px 10px 28px}
+ .topline{margin-bottom:20px}
+ .arcade-hero{margin-bottom:20px}
+ .game-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:6px}
+ .game-tab{font-size:.78rem;min-height:43px}
+ .panel{border-radius:19px;padding:13px}
+ #tttGame{max-width:100%}
+ .brick-head,.shooter-head{align-items:flex-start}
+ #brickCanvas{aspect-ratio:1/1.1;min-height:340px}
+ .brick-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .brick-controls .btn{min-width:0}
+ .brick-extra-controls{display:grid;grid-template-columns:1fr}
+ .brick-extra-controls label{justify-content:space-between}
+ .shooter-canvas{aspect-ratio:1/1.1}
+ #snakeArcade .stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ #snakeArcade .stats>div{padding:10px 6px}
+ #snakeArcade .stats strong{font-size:1.05rem}
+ #snakeArcade .difficulty-row{flex-wrap:wrap;gap:8px}
+ #snakeArcade .stage-guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:390px){
+ .arcade-hero h1{font-size:2.7rem}
+ .brick-stats,.shooter-stats{gap:6px}
+ .brick-stat,.shooter-stat{padding:10px 5px}
+ .brick-stat small,.shooter-stat small{font-size:.62rem}
+ .brick-achievements{grid-template-columns:1fr}
+ #snakeArcade .stats>div{min-width:0}
+ #snakeArcade .stat-label{font-size:.58rem}
+ .actions{grid-template-columns:1fr 1fr}
+ .actions .primary{grid-column:1/-1}
+}
+
 </style>
 </head>
 <body>
 <main class="app">
   <div class="topline"><div class="brand">TM <span>STUDIO</span></div><div class="pill">ARCADE EDITION <span class="spark">✦</span></div></div>
-  <header class="hero"><div class="eyebrow"><span class="spark">✦</span> Ready, set, think!</div><h1><span class="tic">TIC</span> <span class="tac">TAC</span><br><span class="toe">TOE!</span></h1><p class="sub">Tiny board. Big brain energy.</p></header>
+  <header class="hero arcade-hero"><div class="eyebrow"><span class="spark">✦</span> FOUR GAMES · ONE ARCADE</div><h1><span class="tic">TM</span> <span class="tac">ARCADE</span><span class="toe">.</span></h1><p class="sub">Pick a game. Beat your best. Play again.</p></header>
   <div class="game-tabs" role="group" aria-label="Choose arcade game">
     <button class="game-tab" id="tabTtt" aria-pressed="true">✕ Tic-Tac-Toe</button>
     <button class="game-tab" id="tabBrick" aria-pressed="false">▦ Brick Breaker</button>
@@ -128,7 +246,7 @@ button,select{font:inherit}button:focus-visible,select:focus-visible{outline:3px
     <p class="shooter-hint">Controls: ← → / A / D to steer, Space to fire. On mobile, hold the direction buttons and tap/hold FIRE. Destroy enemies before they reach your ship; later waves move faster.</p>
   </section>
 
-  <section class="panel arcade-section" id="snakeGame" aria-label="TM Snake game" hidden><div class="game-shell">
+  <section class="panel arcade-section" id="snakeGame" aria-label="TM Snake game" hidden><div class="game-shell" id="snakeArcade">
     <header class="topbar">
       <a class="brand" href="./" aria-label="TM Snake home"><span class="brand-mark">S</span><span>TM <b>Snake</b></span></a>
       <span class="eyebrow">✦ WORLD TOUR</span>
