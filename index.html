@@ -749,6 +749,7 @@ reset();
     nextDirection=candidate;
   }
   document.addEventListener("keydown",event=>{
+    if(document.getElementById("snakeGame").hidden)return;
     const keys={ArrowUp:"up",w:"up",W:"up",ArrowDown:"down",s:"down",S:"down",ArrowLeft:"left",a:"left",A:"left",ArrowRight:"right",d:"right",D:"right"};
     if(keys[event.key]){event.preventDefault();changeDirection(keys[event.key]);}
     if(event.key===" "){event.preventDefault();if(running)pause();else start();}
@@ -777,6 +778,7 @@ reset();
   restartBtn.addEventListener("click",()=>{reset();playTone(440,.07,"sine",.025);});
   soundBtn.addEventListener("click",()=>{soundOn=!soundOn;updateSoundButton();if(soundOn)playTone(700,.09,"sine",.035,180);});
   updateSoundButton();
+  window.tmSnakeShow=function(show){if(!show){if(running)pause();}else draw();};
   reset();
 })();
 </script>
