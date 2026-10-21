@@ -54,6 +54,10 @@ button,select{font:inherit}button:focus-visible,select:focus-visible{outline:3px
 .brick-mission>div:first-child{display:grid;gap:3px}.mission-label{font-size:.6rem;letter-spacing:.14em;color:#b9a4cc;font-weight:900}.brick-mission strong{font-size:.78rem}.brick-mission>span:last-child{font-size:.68rem;color:#c8b8d7;font-variant-numeric:tabular-nums}.mission-track{height:7px;border-radius:9px;background:#332542;overflow:hidden}.mission-track span{display:block;width:0;height:100%;background:linear-gradient(90deg,#64e8ff,#b18cff);border-radius:9px;transition:width .2s}
 .gravity-controls{grid-template-columns:1fr 1fr 1fr 1fr!important}.brick-extra-controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:11px}.brick-extra-controls label{display:grid;gap:6px;color:#bba9cc;font-size:.67rem;font-weight:900;letter-spacing:.06em}.brick-extra-controls select{min-width:0;width:100%;background:#171126;color:#f4eaff;border:1px solid #59416e;border-radius:10px;padding:10px;font:inherit;font-size:.76rem}.brick-achievements{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:11px}.brick-achievements>div{display:grid;grid-template-columns:auto 1fr;column-gap:7px;align-items:center;padding:10px;background:#171126;border:1px solid #49345f;border-radius:12px}.brick-achievements>div>span{grid-row:span 2;font-size:1.2rem}.brick-achievements strong{font-size:.88rem;color:#ffe66d}.brick-achievements small{font-size:.57rem;color:#b9a4cc;letter-spacing:.07em;font-weight:900}.brick-canvas-wrap.boss-mode{border-color:#ff5d85;box-shadow:0 0 25px #ff3d7333}.brick-canvas-wrap.boss-mode #brickCanvas{filter:saturate(1.18)}.brick-overlay-card{border:1px solid #5b4270;background:#1a1228eF;padding:23px;border-radius:19px;box-shadow:0 20px 60px #0008}.brick-overlay h3{font-size:clamp(1.3rem,5vw,1.9rem)}.brick-overlay p{max-width:280px}.brick-stat{transition:border-color .2s}.brick-stat strong{transition:transform .15s}
 @media(max-width:440px){.gravity-controls{grid-template-columns:1fr 1fr!important}.brick-mission{grid-template-columns:1fr auto}.mission-track{grid-row:2;grid-column:1/-1}.brick-extra-controls{grid-template-columns:1fr}.brick-achievements small{font-size:.51rem}}
+
+/* TM SPACE SHOOTER */
+.shooter-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px}.shooter-title{font-size:clamp(24px,4vw,36px);letter-spacing:.08em;margin:0;background:linear-gradient(90deg,#8ee7ff,#c7a6ff,#ff8ccf);-webkit-background-clip:text;background-clip:text;color:transparent}.shooter-sub{color:var(--muted);font-size:13px;margin:7px 0 0}.shooter-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:15px 0}.shooter-stat{background:#0b1424;border:1px solid #263e61;border-radius:12px;padding:10px;text-align:center}.shooter-stat strong{display:block;font-size:22px;color:#d9f7ff;font-variant-numeric:tabular-nums}.shooter-stat small{display:block;color:#8daacb;font-size:10px;letter-spacing:.13em;margin-top:3px}.shooter-wrap{position:relative;overflow:hidden;border:1px solid #35557c;border-radius:15px;background:#050b18;touch-action:none}.shooter-canvas{display:block;width:100%;height:auto;aspect-ratio:1.54;touch-action:none}.shooter-overlay{position:absolute;inset:0;display:grid;place-items:center;padding:20px;background:#050b18b8;backdrop-filter:blur(5px)}.shooter-overlay[hidden]{display:none}.shooter-overlay-card{max-width:380px;text-align:center;background:#0b1729ed;border:1px solid #36577d;border-radius:18px;padding:25px;box-shadow:0 15px 50px #0008}.shooter-overlay-card h3{margin:0 0 10px;font-size:25px;letter-spacing:.1em;color:#d7f7ff}.shooter-overlay-card p{color:#a9bfd9;font-size:13px;line-height:1.6}.shooter-controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.shooter-controls .btn{flex:1;min-width:120px}.shooter-mobile{display:flex;gap:10px;margin-top:10px}.shooter-mobile button{flex:1;min-height:48px;border:1px solid #35557c;border-radius:12px;background:#101e33;color:#eaf8ff;font-size:18px;font-weight:800;touch-action:none}.shooter-hint{color:#91a7c4;font-size:12px;line-height:1.6;margin:12px 2px 0}.game-tabs{flex-wrap:wrap}
+@media(max-width:600px){.shooter-canvas{aspect-ratio:1/1.12}.shooter-head{flex-direction:column}.shooter-wrap{border-radius:11px}.shooter-stats{gap:6px}.shooter-stat{padding:8px 4px}}
 </style>
 </head>
 <body>
@@ -63,6 +67,7 @@ button,select{font:inherit}button:focus-visible,select:focus-visible{outline:3px
   <div class="game-tabs" role="group" aria-label="Choose arcade game">
     <button class="game-tab" id="tabTtt" aria-pressed="true">✕ Tic-Tac-Toe</button>
     <button class="game-tab" id="tabBrick" aria-pressed="false">▦ Brick Breaker</button>
+    <button class="game-tab" id="tabShooter" aria-pressed="false">🚀 Space Shooter</button>
   </div>
   <section class="panel" id="tttGame" aria-label="Tic Tac Toe game">
     <div class="settings">
@@ -96,7 +101,16 @@ button,select{font:inherit}button:focus-visible,select:focus-visible{outline:3px
     <div class="brick-achievements"><div><span>🏆</span><strong id="brickAchievements">0 / 5</strong><small>ACHIEVEMENTS</small></div><div><span>⚡</span><strong id="brickCombo">x1</strong><small>COMBO</small></div><div><span>🛡️</span><strong id="brickShield">OFF</strong><small>SHIELD</small></div></div>
     <p class="brick-hint">Controls: move with mouse or touch, steer with ← → / A / D, launch with Space. G toggles the optional gravity twist. Catch falling power-ups and clear each brick formation.</p>
   </section>
-  <footer class="footer"><span><strong>TM STUDIO</strong> · THINK DIFFERENT</span><span class="badge" id="saveStatus">● Stats saved on this device</span></footer>
+  
+  <section class="panel arcade-section" id="shooterGame" aria-label="Space Shooter arcade game" hidden>
+    <div class="shooter-head"><div><h2 class="shooter-title">TM SPACE SHOOTER</h2><p class="shooter-sub">Defend the galaxy · survive enemy waves · chase your high score</p></div><div class="brick-level" id="shooterWave">WAVE 1</div></div>
+    <div class="shooter-stats"><div class="shooter-stat"><strong id="shooterScore">0</strong><small>SCORE</small></div><div class="shooter-stat"><strong id="shooterLives">3</strong><small>SHIPS</small></div><div class="shooter-stat"><strong id="shooterBest">0</strong><small>BEST</small></div></div>
+    <div class="shooter-wrap"><canvas id="shooterCanvas" class="shooter-canvas" width="800" height="520" aria-label="Space Shooter game field"></canvas><div class="shooter-overlay" id="shooterOverlay"><div class="shooter-overlay-card"><h3 id="shooterOverlayTitle">GALAXY UNDER ATTACK</h3><p id="shooterOverlayText">Pilot your ship, dodge incoming fire, and clear each enemy wave. Controls: ← → or A / D, Space to fire.</p><button class="btn primary" id="shooterOverlayBtn">▶ Launch Mission</button></div></div></div>
+    <div class="shooter-controls"><button class="btn primary" id="shooterStart">▶ Start / Resume</button><button class="btn secondary" id="shooterPause">Ⅱ Pause</button><button class="btn secondary" id="shooterRestart">↻ New Mission</button></div>
+    <div class="shooter-mobile"><button id="shooterLeft" aria-label="Move left">◀</button><button id="shooterFire" aria-label="Fire">✦ FIRE</button><button id="shooterRight" aria-label="Move right">▶</button></div>
+    <p class="shooter-hint">Controls: ← → / A / D to steer, Space to fire. On mobile, hold the direction buttons and tap/hold FIRE. Destroy enemies before they reach your ship; later waves move faster.</p>
+  </section>
+<footer class="footer"><span><strong>TM STUDIO</strong> · THINK DIFFERENT</span><span class="badge" id="saveStatus">● Stats saved on this device</span></footer>
 </main>
 <script>
 (function(){
@@ -147,8 +161,8 @@ let running=false,over=false,raf=0,last=0,score=0,lives=3,level=1,best=0,paddle=
 const colors={cyan:'#64e8ff',pink:'#ff5db1',gold:'#ffe66d',green:'#8cffb7'};
 const palette=['#ff5db1','#ffe66d','#64e8ff','#8cffb7','#b18cff'];
 try{best=Number(localStorage.getItem('tm-gravity-best')||0);achievements=JSON.parse(localStorage.getItem('tm-gravity-achievements')||'{}')}catch(e){}
-function switchGame(which){const isBrick=which==='brick';ttt.hidden=isBrick;brick.hidden=!isBrick;tabTtt.setAttribute('aria-pressed',String(!isBrick));tabBrick.setAttribute('aria-pressed',String(isBrick));if(isBrick)draw();else stopLoop()}
-tabTtt.addEventListener('click',()=>switchGame('ttt'));tabBrick.addEventListener('click',()=>switchGame('brick'));
+function switchGame(which){const isTtt=which==='ttt',isBrick=which==='brick',isShooter=which==='shooter';ttt.hidden=!isTtt;brick.hidden=!isBrick;$('shooterGame').hidden=!isShooter;tabTtt.setAttribute('aria-pressed',String(isTtt));tabBrick.setAttribute('aria-pressed',String(isBrick));$('tabShooter').setAttribute('aria-pressed',String(isShooter));if(isBrick){window.tmShooterShow&&window.tmShooterShow(false);draw()}else{stopLoop();if(window.tmShooterShow)window.tmShooterShow(isShooter)}}
+tabTtt.addEventListener('click',()=>switchGame('ttt'));tabBrick.addEventListener('click',()=>switchGame('brick'));$('tabShooter').addEventListener('click',()=>switchGame('shooter'));
 function showOverlay(title,msg,button){$('brickOverlayTitle').textContent=title;$('brickOverlayText').textContent=msg;$('brickOverlayBtn').textContent=button;overlay.hidden=false}
 function hideOverlay(){overlay.hidden=true}
 function updateStats(){$('brickScore').textContent=score;$('brickLives').textContent=lives;$('brickLevel').textContent='LEVEL '+level;$('brickBest').textContent=best;$('brickCombo').textContent='x'+combo;$('brickShield').textContent=shield>0?Math.ceil(shield/60)+'s':'OFF';$('brickAchievements').textContent=Object.values(achievements).filter(Boolean).length+' / 5';$('brickMission').textContent=level%5===0?'Damage the boss core':('Break '+missionTarget+' bricks');$('brickMissionCount').textContent=Math.min(missionDone,missionTarget)+' / '+missionTarget;$('brickMissionBar').style.width=Math.min(100,missionDone/missionTarget*100)+'%';wrap.classList.toggle('boss-mode',!!boss)}
@@ -239,5 +253,57 @@ function loop(now){raf=0;if(!running||brick.hidden)return;const dt=Math.min(32,n
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&running){stopLoop();showOverlay('PAUSED','Game paused in the background.','▶ Resume')}});
 resetGame();
 })();
-</script>\n</body>
+</script>\n
+<script>
+(function(){
+const $=id=>document.getElementById(id),canvas=$('shooterCanvas'),ctx=canvas.getContext('2d'),overlay=$('shooterOverlay');
+let active=false,started=false,raf=0,last=0,score=0,lives=3,wave=1,best=0,frame=0,spawnClock=0,fireClock=0,invuln=0;
+let keys={left:false,right:false,fire:false},bullets=[],foes=[],particles=[],stars=[];
+const W=canvas.width,H=canvas.height,ship={x:W/2,y:H-56,w:34,h:31,speed:6.5};
+for(let i=0;i<100;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.7+.3,v:Math.random()*1.4+.3});
+try{best=Number(localStorage.getItem('tm-space-best')||0)}catch(e){}
+$('shooterBest').textContent=best;
+function overlayShow(title,msg,btn){$('shooterOverlayTitle').textContent=title;$('shooterOverlayText').textContent=msg;$('shooterOverlayBtn').textContent=btn;overlay.hidden=false}
+function stop(){active=false;if(raf)cancelAnimationFrame(raf);raf=0}
+function reset(){stop();score=0;lives=3;wave=1;frame=0;spawnClock=0;fireClock=0;invuln=0;bullets=[];foes=[];particles=[];ship.x=W/2;$('shooterScore').textContent=score;$('shooterLives').textContent=lives;$('shooterWave').textContent='WAVE '+wave;draw();overlayShow('GALAXY UNDER ATTACK','Pilot your ship, dodge incoming fire, and clear enemy waves. Controls: ← → or A / D, Space to fire.','▶ Launch Mission')}
+function burst(x,y,color,n=10){for(let i=0;i<n;i++)particles.push({x,y,vx:(Math.random()-.5)*5,vy:(Math.random()-.5)*5,life:22+Math.random()*18,color,r:1+Math.random()*3})}
+function spawn(){const type=Math.random()<.22?'fast':Math.random()<.18?'tank':'normal';const hp=type==='tank'?3:1;foes.push({x:35+Math.random()*(W-70),y:-25,w:type==='tank'?34:27,h:type==='tank'?28:23,hp,max:hp,type,v:(1+wave*.22)*(type==='fast'?1.55:type==='tank'?.68:1),phase:Math.random()*6.28,shoot:70+Math.random()*110})}
+function fire(){if(fireClock>0)return;bullets.push({x:ship.x,y:ship.y-20,v:-9,enemy:false});fireClock=9}
+function enemyFire(e){bullets.push({x:e.x,y:e.y+e.h/2,v:3+wave*.18,enemy:true});}
+function start(){if(!document.getElementById('shooterGame').hidden===false)return;overlay.hidden=true;active=true;started=true;last=0;if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}
+function draw(){
+ ctx.clearRect(0,0,W,H);const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#071326');g.addColorStop(1,'#040812');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ for(const s of stars){ctx.fillStyle='rgba(185,220,255,'+(0.35+s.r*.25)+')';ctx.fillRect(s.x,s.y,s.r,s.r*2)}
+ ctx.strokeStyle='#162d4b';ctx.lineWidth=1;for(let x=0;x<W;x+=80){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+ for(const p of particles){ctx.globalAlpha=Math.max(0,p.life/35);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1}
+ for(const b of bullets){ctx.shadowBlur=12;ctx.shadowColor=b.enemy?'#ff5d86':'#75f4ff';ctx.fillStyle=b.enemy?'#ff6488':'#9df8ff';ctx.fillRect(b.x-2,b.y-9,4,13);ctx.shadowBlur=0}
+ for(const e of foes){ctx.save();ctx.translate(e.x,e.y);ctx.shadowBlur=15;ctx.shadowColor=e.type==='tank'?'#ffb05e':e.type==='fast'?'#ff5cbd':'#7b8cff';ctx.fillStyle=e.type==='tank'?'#e99b4e':e.type==='fast'?'#f05eaf':'#728cff';ctx.beginPath();ctx.moveTo(0,e.h/2);ctx.lineTo(-e.w/2,-e.h/2);ctx.lineTo(0,-e.h/4);ctx.lineTo(e.w/2,-e.h/2);ctx.closePath();ctx.fill();ctx.shadowBlur=0;if(e.hp>1){ctx.fillStyle='#fff';ctx.fillRect(-e.w/2,-e.h/2-6,e.w*(e.hp/e.max),3)}ctx.restore()}
+ ctx.save();ctx.translate(ship.x,ship.y);if(invuln>0&&Math.floor(invuln/4)%2===0)ctx.globalAlpha=.35;ctx.shadowBlur=20;ctx.shadowColor='#5de9ff';ctx.fillStyle='#65e9ff';ctx.beginPath();ctx.moveTo(0,-22);ctx.lineTo(-19,14);ctx.lineTo(-6,9);ctx.lineTo(0,15);ctx.lineTo(6,9);ctx.lineTo(19,14);ctx.closePath();ctx.fill();ctx.fillStyle='#e8fbff';ctx.beginPath();ctx.moveTo(0,-12);ctx.lineTo(-5,5);ctx.lineTo(5,5);ctx.closePath();ctx.fill();ctx.shadowBlur=0;if(active&&frame%5<3){ctx.fillStyle='#ffbf6a';ctx.beginPath();ctx.moveTo(-6,13);ctx.lineTo(0,23+Math.random()*6);ctx.lineTo(6,13);ctx.fill()}ctx.restore();
+}
+function update(){
+ frame++;if(invuln>0)invuln--;if(fireClock>0)fireClock--;
+ for(const s of stars){s.y+=s.v+wave*.12;if(s.y>H){s.y=0;s.x=Math.random()*W}}
+ if(keys.left)ship.x-=ship.speed;if(keys.right)ship.x+=ship.speed;ship.x=Math.max(22,Math.min(W-22,ship.x));if(keys.fire)fire();
+ spawnClock++;if(spawnClock>Math.max(20,62-wave*3)){spawn();spawnClock=0}
+ for(const e of foes){e.phase+=.04;e.x+=Math.sin(e.phase)*.8;e.y+=e.v;e.shoot--;if(e.shoot<=0&&e.y>15&&e.y<H-130){enemyFire(e);e.shoot=100+Math.random()*100-wave*3}if(e.y>H-15){e.dead=true;lives--;invuln=65;burst(ship.x,ship.y,'#ff668c',20);if(lives<=0){lives=0;endGame();return}}if(invuln<=0&&Math.abs(e.x-ship.x)<(e.w+ship.w)*.42&&Math.abs(e.y-ship.y)<(e.h+ship.h)*.45){e.dead=true;lives--;invuln=75;burst(ship.x,ship.y,'#ff668c',22);if(lives<=0){endGame();return}}}
+ for(const b of bullets){b.y+=b.v;if(b.enemy){if(invuln<=0&&Math.abs(b.x-ship.x)<16&&Math.abs(b.y-ship.y)<17){b.dead=true;lives--;invuln=75;burst(ship.x,ship.y,'#ff668c',18);if(lives<=0){endGame();return}}}else{for(const e of foes){if(!e.dead&&Math.abs(b.x-e.x)<e.w*.52&&Math.abs(b.y-e.y)<e.h*.55){b.dead=true;e.hp--;burst(b.x,b.y,'#80f6ff',4);if(e.hp<=0){e.dead=true;score+=e.type==='tank'?35:e.type==='fast'?20:10;burst(e.x,e.y,e.type==='tank'?'#ffb05e':'#9d9aff',14);$('shooterScore').textContent=score;if(score>best){best=score;$('shooterBest').textContent=best;try{localStorage.setItem('tm-space-best',best)}catch(x){}}}break}}}}
+ bullets=bullets.filter(b=>!b.dead&&b.y>-15&&b.y<H+15);foes=foes.filter(e=>!e.dead&&e.y<H+30);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.life--});particles=particles.filter(p=>p.life>0);
+ if(foes.length===0&&frame>100&&spawnClock===0){wave++;$('shooterWave').textContent='WAVE '+wave;score+=50;$('shooterScore').textContent=score}
+ $('shooterLives').textContent=lives;
+}
+function endGame(){stop();draw();overlayShow('MISSION FAILED','Final score: '+score+'. You reached wave '+wave+'. Launch a new mission and beat your best.','↻ Try Again')}
+function loop(now){if(!active)return;const dt=Math.min(2,(now-(last||now))/16.67);last=now;for(let i=0;i<dt;i++)update();draw();if(active)raf=requestAnimationFrame(loop)}
+function setKey(e,on){const k=e.key.toLowerCase();if(['arrowleft','arrowright',' ','a','d'].includes(k))e.preventDefault();if(k==='arrowleft'||k==='a')keys.left=on;if(k==='arrowright'||k==='d')keys.right=on;if(k===' ')keys.fire=on}
+window.addEventListener('keydown',e=>{if(!document.getElementById('shooterGame').hidden)setKey(e,true)});window.addEventListener('keyup',e=>setKey(e,false));window.addEventListener('blur',()=>{keys.left=keys.right=keys.fire=false});
+function hold(id,key){const el=$(id);const down=e=>{e.preventDefault();keys[key]=true};const up=e=>{e.preventDefault();keys[key]=false};el.addEventListener('pointerdown',down);['pointerup','pointercancel','pointerleave'].forEach(n=>el.addEventListener(n,up))}
+hold('shooterLeft','left');hold('shooterRight','right');hold('shooterFire','fire');
+$('shooterOverlayBtn').addEventListener('click',()=>start());$('shooterStart').addEventListener('click',()=>{if(!started)start();else if(!active)start()});$('shooterPause').addEventListener('click',()=>{if(active){stop();overlayShow('MISSION PAUSED','Your ship is safe for now. Resume when ready.','▶ Resume')}else if(started)start()});$('shooterRestart').addEventListener('click',reset);
+window.tmShooterShow=function(show){if(!show){stop();keys.left=keys.right=keys.fire=false}else if(!active)draw()};
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&active){stop();overlayShow('MISSION PAUSED','Mission paused while this tab is hidden.','▶ Resume')}});
+canvas.addEventListener('pointermove',e=>{if(!document.getElementById('shooterGame').hidden){const r=canvas.getBoundingClientRect();ship.x=Math.max(22,Math.min(W-22,(e.clientX-r.left)/r.width*W));if(e.pointerType==='touch')keys.fire=true}});
+canvas.addEventListener('pointerup',()=>keys.fire=false);canvas.addEventListener('pointercancel',()=>keys.fire=false);
+reset();
+})();
+</script>
+</body>
 </html>
