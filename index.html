@@ -257,7 +257,7 @@ resetGame();
 <script>
 (function(){
 const $=id=>document.getElementById(id),canvas=$('shooterCanvas'),ctx=canvas.getContext('2d'),overlay=$('shooterOverlay');
-let active=false,started=false,raf=0,last=0,score=0,lives=3,wave=1,best=0,frame=0,spawnClock=0,fireClock=0,invuln=0;
+let active=false,started=false,raf=0,last=0,score=0,lives=3,wave=1,best=0,frame=0,spawnClock=0,fireClock=0,invuln=0,spawnedThisWave=0;
 let keys={left:false,right:false,fire:false},bullets=[],foes=[],particles=[],stars=[];
 const W=canvas.width,H=canvas.height,ship={x:W/2,y:H-56,w:34,h:31,speed:6.5};
 for(let i=0;i<100;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.7+.3,v:Math.random()*1.4+.3});
@@ -265,12 +265,12 @@ try{best=Number(localStorage.getItem('tm-space-best')||0)}catch(e){}
 $('shooterBest').textContent=best;
 function overlayShow(title,msg,btn){$('shooterOverlayTitle').textContent=title;$('shooterOverlayText').textContent=msg;$('shooterOverlayBtn').textContent=btn;overlay.hidden=false}
 function stop(){active=false;if(raf)cancelAnimationFrame(raf);raf=0}
-function reset(){stop();score=0;lives=3;wave=1;frame=0;spawnClock=0;fireClock=0;invuln=0;bullets=[];foes=[];particles=[];ship.x=W/2;$('shooterScore').textContent=score;$('shooterLives').textContent=lives;$('shooterWave').textContent='WAVE '+wave;draw();overlayShow('GALAXY UNDER ATTACK','Pilot your ship, dodge incoming fire, and clear enemy waves. Controls: ← → or A / D, Space to fire.','▶ Launch Mission')}
+function reset(){stop();score=0;lives=3;wave=1;frame=0;spawnClock=0;fireClock=0;invuln=0;spawnedThisWave=0;bullets=[];foes=[];particles=[];ship.x=W/2;$('shooterScore').textContent=score;$('shooterLives').textContent=lives;$('shooterWave').textContent='WAVE '+wave;draw();overlayShow('GALAXY UNDER ATTACK','Pilot your ship, dodge incoming fire, and clear enemy waves. Controls: ← → or A / D, Space to fire.','▶ Launch Mission')}
 function burst(x,y,color,n=10){for(let i=0;i<n;i++)particles.push({x,y,vx:(Math.random()-.5)*5,vy:(Math.random()-.5)*5,life:22+Math.random()*18,color,r:1+Math.random()*3})}
 function spawn(){const type=Math.random()<.22?'fast':Math.random()<.18?'tank':'normal';const hp=type==='tank'?3:1;foes.push({x:35+Math.random()*(W-70),y:-25,w:type==='tank'?34:27,h:type==='tank'?28:23,hp,max:hp,type,v:(1+wave*.22)*(type==='fast'?1.55:type==='tank'?.68:1),phase:Math.random()*6.28,shoot:70+Math.random()*110})}
 function fire(){if(fireClock>0)return;bullets.push({x:ship.x,y:ship.y-20,v:-9,enemy:false});fireClock=9}
 function enemyFire(e){bullets.push({x:e.x,y:e.y+e.h/2,v:3+wave*.18,enemy:true});}
-function start(){if(!document.getElementById('shooterGame').hidden===false)return;overlay.hidden=true;active=true;started=true;last=0;if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}
+function start(){if($('shooterGame').hidden)return;overlay.hidden=true;active=true;started=true;last=0;if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(loop)}
 function draw(){
  ctx.clearRect(0,0,W,H);const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#071326');g.addColorStop(1,'#040812');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
  for(const s of stars){ctx.fillStyle='rgba(185,220,255,'+(0.35+s.r*.25)+')';ctx.fillRect(s.x,s.y,s.r,s.r*2)}
@@ -284,11 +284,10 @@ function update(){
  frame++;if(invuln>0)invuln--;if(fireClock>0)fireClock--;
  for(const s of stars){s.y+=s.v+wave*.12;if(s.y>H){s.y=0;s.x=Math.random()*W}}
  if(keys.left)ship.x-=ship.speed;if(keys.right)ship.x+=ship.speed;ship.x=Math.max(22,Math.min(W-22,ship.x));if(keys.fire)fire();
- spawnClock++;if(spawnClock>Math.max(20,62-wave*3)){spawn();spawnClock=0}
+ spawnClock++;const waveTarget=7+wave*2;if(spawnedThisWave<waveTarget&&spawnClock>Math.max(20,62-wave*3)){spawn();spawnedThisWave++;spawnClock=0}
  for(const e of foes){e.phase+=.04;e.x+=Math.sin(e.phase)*.8;e.y+=e.v;e.shoot--;if(e.shoot<=0&&e.y>15&&e.y<H-130){enemyFire(e);e.shoot=100+Math.random()*100-wave*3}if(e.y>H-15){e.dead=true;lives--;invuln=65;burst(ship.x,ship.y,'#ff668c',20);if(lives<=0){lives=0;endGame();return}}if(invuln<=0&&Math.abs(e.x-ship.x)<(e.w+ship.w)*.42&&Math.abs(e.y-ship.y)<(e.h+ship.h)*.45){e.dead=true;lives--;invuln=75;burst(ship.x,ship.y,'#ff668c',22);if(lives<=0){endGame();return}}}
  for(const b of bullets){b.y+=b.v;if(b.enemy){if(invuln<=0&&Math.abs(b.x-ship.x)<16&&Math.abs(b.y-ship.y)<17){b.dead=true;lives--;invuln=75;burst(ship.x,ship.y,'#ff668c',18);if(lives<=0){endGame();return}}}else{for(const e of foes){if(!e.dead&&Math.abs(b.x-e.x)<e.w*.52&&Math.abs(b.y-e.y)<e.h*.55){b.dead=true;e.hp--;burst(b.x,b.y,'#80f6ff',4);if(e.hp<=0){e.dead=true;score+=e.type==='tank'?35:e.type==='fast'?20:10;burst(e.x,e.y,e.type==='tank'?'#ffb05e':'#9d9aff',14);$('shooterScore').textContent=score;if(score>best){best=score;$('shooterBest').textContent=best;try{localStorage.setItem('tm-space-best',best)}catch(x){}}}break}}}}
- bullets=bullets.filter(b=>!b.dead&&b.y>-15&&b.y<H+15);foes=foes.filter(e=>!e.dead&&e.y<H+30);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.life--});particles=particles.filter(p=>p.life>0);
- if(foes.length===0&&frame>100&&spawnClock===0){wave++;$('shooterWave').textContent='WAVE '+wave;score+=50;$('shooterScore').textContent=score}
+ bullets=bullets.filter(b=>!b.dead&&b.y>-15&&b.y<H+15);foes=foes.filter(e=>!e.dead&&e.y<H+30);if(foes.length===0&&spawnedThisWave>=7+wave*2){wave++;spawnedThisWave=0;score+=50;$('shooterWave').textContent='WAVE '+wave;$('shooterScore').textContent=score;if(score>best){best=score;$('shooterBest').textContent=best;try{localStorage.setItem('tm-space-best',best)}catch(x){}}}particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.life--});particles=particles.filter(p=>p.life>0);
  $('shooterLives').textContent=lives;
 }
 function endGame(){stop();draw();overlayShow('MISSION FAILED','Final score: '+score+'. You reached wave '+wave+'. Launch a new mission and beat your best.','↻ Try Again')}
