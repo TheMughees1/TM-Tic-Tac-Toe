@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#171026">
 <meta name="description" content="Play TM Tic Tac Toe: arcade-style Tic-Tac-Toe with AI difficulty levels, local multiplayer, extra board modes, sound and saved stats.">
-<title>TM Tic-Tac-Toe — Arcade Edition | TM Studio</title>
+<title>TM Arcade — Classic Brick Breaker | TM Studio</title>
 <style>
 :root{color-scheme:dark;--bg:#100b1b;--panel:#1d1530;--panel2:#261b3d;--line:#49345f;--text:#fff8ff;--muted:#c0b0d3;--pink:#ff5db1;--yellow:#ffe66d;--blue:#64e8ff;--green:#8cffb7;--shadow:0 24px 70px #05020d99}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;padding:28px 16px 36px;display:grid;place-items:center;overflow-x:hidden;background:radial-gradient(ellipse at 12% 8%,#52235d88,transparent 34%),radial-gradient(ellipse at 92% 82%,#164f6c66,transparent 36%),var(--bg);font-family:ui-rounded,"Arial Rounded MT Bold",system-ui,sans-serif;color:var(--text)}
@@ -83,18 +83,18 @@ button,select{font:inherit}button:focus-visible,select:focus-visible{outline:3px
     <div class="tinyactions"><button class="tiny" id="sound" aria-pressed="false">♫ Sound: Off</button><button class="tiny" id="theme">✦ Switch Colors</button></div>
   </section>
   <section class="panel arcade-section" id="brickGame" aria-label="Gravity Breaker arcade game" hidden>
-    <div class="brick-head"><div><h2 class="brick-title">✦ GRAVITY BREAKER</h2><p class="brick-sub">Shift gravity. Trigger chaos. Beat the boss.</p></div><div class="brick-level" id="brickLevel">LEVEL 1</div></div>
+    <div class="brick-head"><div><h2 class="brick-title">TM BRICK BREAKER</h2><p class="brick-sub">Classic arcade action · inspired by the golden age of brick-breakers</p></div><div class="brick-level" id="brickLevel">LEVEL 1</div></div>
     <div class="brick-stats">
       <div class="brick-stat"><strong id="brickScore">0</strong><small>SCORE</small></div><div class="brick-stat"><strong id="brickLives">3</strong><small>LIVES</small></div><div class="brick-stat"><strong id="brickBest">0</strong><small>BEST</small></div>
     </div>
     <div class="brick-mission"><div><span class="mission-label">MISSION</span><strong id="brickMission">Break 12 bricks</strong></div><div class="mission-track"><span id="brickMissionBar"></span></div><span id="brickMissionCount">0 / 12</span></div>
     <div class="brick-canvas-wrap" id="brickWrap"><canvas id="brickCanvas" width="600" height="510" aria-label="Gravity Breaker game field"></canvas>
-      <div class="brick-overlay" id="brickOverlay"><div class="brick-overlay-card"><h3 id="brickOverlayTitle">GRAVITY BREAKER</h3><p id="brickOverlayText">Smash the grid, bend gravity and survive the boss waves.</p><button class="btn primary" id="brickOverlayBtn">▶ Start Run</button></div></div>
+      <div class="brick-overlay" id="brickOverlay"><div class="brick-overlay-card"><h3 id="brickOverlayTitle">BRICK BREAKER</h3><p id="brickOverlayText">Break every brick. Catch power-ups. Clear the next stage.</p><button class="btn primary" id="brickOverlayBtn">▶ Start Run</button></div></div>
     </div>
     <div class="brick-controls gravity-controls"><button class="btn primary" id="brickStart">▶ Start / Resume</button><button class="btn secondary" id="brickGravity">↕ Shift Gravity</button><button class="btn secondary" id="brickPause">Ⅱ Pause</button><button class="btn secondary" id="brickRestart">↻ New Run</button></div>
     <div class="brick-extra-controls"><label>LEVEL <select id="brickLevelSelect" aria-label="Starting level"><option value="1">01 — Neon Grid</option><option value="2">02 — Faster Field</option><option value="3">03 — Armored Core</option><option value="4">04 — Chaos Circuit</option><option value="5">05 — BOSS ARENA</option></select></label><label> PADDLE SKIN <select id="brickSkin" aria-label="Paddle skin"><option value="cyan">Cyber Cyan</option><option value="pink">Hot Pink</option><option value="gold">Solar Gold</option><option value="green">Toxic Green</option></select></label></div>
     <div class="brick-achievements"><div><span>🏆</span><strong id="brickAchievements">0 / 5</strong><small>ACHIEVEMENTS</small></div><div><span>⚡</span><strong id="brickCombo">x1</strong><small>COMBO</small></div><div><span>🛡️</span><strong id="brickShield">OFF</strong><small>SHIELD</small></div></div>
-    <p class="brick-hint">Controls: mouse / touch to move, ← → or A / D to steer, Space to launch, G or the Gravity button to shift the gravity field. Catch power-ups; chain-reacting bricks and boss cores are worth extra points.</p>
+    <p class="brick-hint">Controls: move with mouse or touch, steer with ← → / A / D, launch with Space. G toggles the optional gravity twist. Catch falling power-ups and clear each brick formation.</p>
   </section>
   <footer class="footer"><span><strong>TM STUDIO</strong> · THINK DIFFERENT</span><span class="badge" id="saveStatus">● Stats saved on this device</span></footer>
 </main>
@@ -165,12 +165,64 @@ window.addEventListener('keyup',e=>{if(['ArrowLeft','a','A'].includes(e.key))key
 $('brickOverlayBtn').addEventListener('click',startGame);$('brickStart').addEventListener('click',startGame);$('brickPause').addEventListener('click',()=>{if(running){stopLoop();showOverlay('PAUSED','Your run is saved until you restart.','▶ Resume')}else if(!over)startGame()});$('brickRestart').addEventListener('click',()=>resetGame(Number($('brickLevelSelect').value)||1));$('brickLevelSelect').addEventListener('change',()=>{if(!running)resetGame(Number($('brickLevelSelect').value)||1)});$('brickSkin').addEventListener('change',e=>{skin=e.target.value;draw()});$('brickGravity').addEventListener('click',shiftGravity);
 function shiftGravity(){gravity*=-1;balls.forEach(b=>{if(!b.stuck)b.vy=-b.vy});chainFlash=18;draw()}
 function rounded(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,Math.min(r,w/2,h/2));ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke()}}
-function background(){const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#201332');g.addColorStop(.55,'#100b1b');g.addColorStop(1,'#080710');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.save();ctx.globalAlpha=.14;ctx.strokeStyle=gravity>0?'#9d79d4':'#64e8ff';for(let x=0;x<W;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}for(let y=0;y<H;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}ctx.restore();if(chainFlash>0){ctx.save();ctx.globalAlpha=chainFlash/35;ctx.strokeStyle='#64e8ff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(W/2,H/2,35+(18-chainFlash)*5,0,Math.PI*2);ctx.stroke();ctx.restore()}}
-function draw(){background();bricks.forEach(b=>{if(!b.alive)return;ctx.save();ctx.shadowBlur=12;ctx.shadowColor=b.color;rounded(b.x,b.y,b.w,b.h,5,b.color,b.hp>1?'#ffffffaa':'');ctx.shadowBlur=0;if(b.type==='explosive'){ctx.fillStyle='#351521';ctx.font='bold 11px system-ui';ctx.textAlign='center';ctx.fillText('✹',b.x+b.w/2,b.y+13)}else if(b.type==='electric'){ctx.fillStyle='#382a16';ctx.font='bold 11px system-ui';ctx.textAlign='center';ctx.fillText('ϟ',b.x+b.w/2,b.y+13)}else if(b.hp>1){ctx.fillStyle='#24132f';ctx.font='bold 10px system-ui';ctx.textAlign='center';ctx.fillText('II',b.x+b.w/2,b.y+13)}ctx.restore()});if(boss){ctx.save();ctx.shadowBlur=24;ctx.shadowColor='#ff3d73';const bg=ctx.createLinearGradient(boss.x,boss.y,boss.x+boss.w,boss.y+boss.h);bg.addColorStop(0,'#ff5d85');bg.addColorStop(.5,'#a52d80');bg.addColorStop(1,'#ff9d61');rounded(boss.x,boss.y,boss.w,boss.h,13,bg,'#ffd1dc');ctx.fillStyle='#220d24';ctx.font='bold 18px system-ui';ctx.textAlign='center';ctx.fillText('CORE '+boss.hp,boss.x+boss.w/2,boss.y+30);ctx.restore();ctx.fillStyle='#38213b';rounded(170,38,260,8,4,'#38213b');rounded(170,38,260*boss.hp/boss.maxHp,8,4,'#ff5d85')}
-drops.forEach(d=>{ctx.save();ctx.shadowBlur=15;ctx.shadowColor='#8cffb7';rounded(d.x-9,d.y-9,18,18,6,'#8cffb7');ctx.fillStyle='#153027';ctx.font='bold 11px system-ui';ctx.textAlign='center';ctx.fillText(d.type==='multi'?'M':d.type==='shield'?'S':d.type==='laser'?'L':'W',d.x,d.y+4);ctx.restore()});
-ctx.save();const col=colors[skin]||colors.cyan;ctx.shadowBlur=24;ctx.shadowColor=col;const pg=ctx.createLinearGradient(paddle.x,paddle.y,paddle.x+paddle.w,paddle.y);pg.addColorStop(0,col);pg.addColorStop(1,'#b18cff');rounded(paddle.x,paddle.y,paddle.w,paddle.h,7,pg);if(shield>0){ctx.strokeStyle='#8cffb7';ctx.lineWidth=3;ctx.beginPath();ctx.arc(paddle.x+paddle.w/2,paddle.y+5,paddle.w*.68,Math.PI,Math.PI*2);ctx.stroke()}ctx.restore();
-balls.forEach(b=>{ctx.save();ctx.shadowBlur=24;ctx.shadowColor='#ffe66d';const g=ctx.createRadialGradient(b.x-2,b.y-2,1,b.x,b.y,b.r+3);g.addColorStop(0,'#fffbd0');g.addColorStop(1,'#ffe66d');ctx.fillStyle=g;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();ctx.restore()});
-ctx.fillStyle='#cbb9dc';ctx.font='800 11px system-ui';ctx.fillText('TM ARCADE  •  GRAVITY '+(gravity>0?'↓':'↑'),15,H-12);if(!brick.hidden)updateStats()}
+function background(){
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#071a3a');g.addColorStop(.55,'#071126');g.addColorStop(1,'#020713');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  ctx.save();ctx.globalAlpha=.12;ctx.strokeStyle='#6ba9ff';ctx.lineWidth=1;
+  for(let x=18;x<W;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+  for(let y=18;y<H;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+  ctx.restore();
+  if(chainFlash>0){ctx.save();ctx.globalAlpha=Math.min(.55,chainFlash/28);ctx.strokeStyle='#ffffff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(W/2,H/2,24+(18-chainFlash)*5,0,Math.PI*2);ctx.stroke();ctx.restore()}
+}
+function draw(){
+  background();
+  bricks.forEach(b=>{
+    if(!b.alive)return;
+    ctx.save();
+    const grad=ctx.createLinearGradient(b.x,b.y,b.x,b.y+b.h);
+    grad.addColorStop(0,'#ffffff');grad.addColorStop(.16,b.color);grad.addColorStop(1,b.color);
+    ctx.shadowBlur=5;ctx.shadowColor=b.color;
+    rounded(b.x,b.y,b.w,b.h,3,grad,'#ffffffaa');
+    ctx.shadowBlur=0;ctx.fillStyle='#ffffff66';ctx.fillRect(b.x+3,b.y+2,Math.max(2,b.w-6),2);
+    if(b.type==='explosive'){ctx.fillStyle='#24111b';ctx.font='bold 12px system-ui';ctx.textAlign='center';ctx.fillText('✹',b.x+b.w/2,b.y+13)}
+    else if(b.type==='electric'){ctx.fillStyle='#17213b';ctx.font='bold 12px system-ui';ctx.textAlign='center';ctx.fillText('ϟ',b.x+b.w/2,b.y+13)}
+    else if(b.hp>1){ctx.strokeStyle='#ffffffcc';ctx.lineWidth=1.5;ctx.strokeRect(b.x+4,b.y+4,b.w-8,b.h-8);ctx.fillStyle='#fff';ctx.font='bold 10px system-ui';ctx.textAlign='center';ctx.fillText(String(b.hp),b.x+b.w/2,b.y+13)}
+    ctx.restore()
+  });
+  if(boss){
+    ctx.save();ctx.shadowBlur=14;ctx.shadowColor='#ff376e';
+    const bg=ctx.createLinearGradient(boss.x,boss.y,boss.x,boss.y+boss.h);
+    bg.addColorStop(0,'#ffb4d1');bg.addColorStop(.25,'#f43f78');bg.addColorStop(1,'#8c174f');
+    rounded(boss.x,boss.y,boss.w,boss.h,6,bg,'#fff0f6');
+    ctx.fillStyle='#fff';ctx.font='bold 17px system-ui';ctx.textAlign='center';ctx.fillText('BOSS CORE',boss.x+boss.w/2,boss.y+21);
+    ctx.restore();
+    rounded(170,28,260,8,3,'#21314d');rounded(170,28,260*boss.hp/boss.maxHp,8,3,'#ff477e')
+  }
+  drops.forEach(d=>{
+    const dc=d.type==='multi'?'#67e8ff':d.type==='shield'?'#7dffb2':d.type==='laser'?'#ff6db5':'#ffe66d';
+    ctx.save();ctx.shadowBlur=8;ctx.shadowColor=dc;
+    const dg=ctx.createLinearGradient(d.x-10,d.y-9,d.x+10,d.y+9);dg.addColorStop(0,'#ffffff');dg.addColorStop(.25,dc);dg.addColorStop(1,dc);
+    rounded(d.x-10,d.y-8,20,16,4,dg,'#ffffff');
+    ctx.fillStyle='#081327';ctx.font='bold 10px system-ui';ctx.textAlign='center';ctx.fillText(d.type==='multi'?'M':d.type==='shield'?'S':d.type==='laser'?'L':'W',d.x,d.y+4);ctx.restore()
+  });
+  ctx.save();
+  const pg=ctx.createLinearGradient(paddle.x,paddle.y,paddle.x,paddle.y+paddle.h);
+  pg.addColorStop(0,'#ffffff');pg.addColorStop(.24,colors[skin]||'#8fcaff');pg.addColorStop(1,'#315b94');
+  ctx.shadowBlur=10;ctx.shadowColor=colors[skin]||'#8fcaff';
+  rounded(paddle.x,paddle.y,paddle.w,paddle.h,5,pg,'#e9f5ff');
+  ctx.fillStyle='#ffffffaa';ctx.fillRect(paddle.x+8,paddle.y+2,Math.max(2,paddle.w-16),2);
+  if(shield>0){ctx.strokeStyle='#7dffb2';ctx.lineWidth=3;ctx.beginPath();ctx.arc(paddle.x+paddle.w/2,paddle.y+5,paddle.w*.68,Math.PI,Math.PI*2);ctx.stroke()}
+  ctx.restore();
+  balls.forEach(b=>{
+    ctx.save();ctx.shadowBlur=12;ctx.shadowColor='#bdeaff';
+    const bg=ctx.createRadialGradient(b.x-2,b.y-3,1,b.x,b.y,b.r+3);
+    bg.addColorStop(0,'#ffffff');bg.addColorStop(.55,'#eaf8ff');bg.addColorStop(1,'#7fcaff');
+    ctx.fillStyle=bg;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();ctx.restore()
+  });
+  ctx.fillStyle='#9fb8d9';ctx.font='800 10px system-ui';ctx.fillText('TM ARCADE  •  '+(gravity>0?'CLASSIC MODE':'GRAVITY SHIFT'),15,H-12);
+  if(!brick.hidden)updateStats()
+}
 function award(id){if(achievements[id])return;achievements[id]=true;try{localStorage.setItem('tm-gravity-achievements',JSON.stringify(achievements))}catch(e){}}
 function addScore(n){score+=n*combo;if(comboTimer>0)combo=Math.min(8,combo+1);comboTimer=95;if(score>best){best=score;try{localStorage.setItem('tm-gravity-best',String(best))}catch(e){}}}
 function chain(b){chainFlash=18;let count=0;bricks.forEach(other=>{if(other.alive&&other!==b&&Math.abs((other.x+other.w/2)-(b.x+b.w/2))<b.w*1.5&&Math.abs((other.y+other.h/2)-(b.y+b.h/2))<45){other.hp--;count++;if(other.hp<=0){other.alive=false;addScore(20);broken++;missionDone++}}});if(count)addScore(count*5)}
