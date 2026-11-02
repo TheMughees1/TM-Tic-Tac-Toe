@@ -345,6 +345,57 @@ button:disabled{cursor:not-allowed;opacity:.55;filter:saturate(.65)}
  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
 
+
+/* Mobile-first arcade layout refinement */
+.app{width:min(100% - 32px,1120px);margin-inline:auto}
+.game-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;max-width:none;gap:12px}
+.game-tab{position:relative;display:flex;align-items:flex-end;justify-content:flex-start;text-align:left;min-width:0;min-height:112px;padding:16px 12px;border:1px solid var(--uux-border);border-radius:16px;background:linear-gradient(145deg,#1a263b,#101827);color:var(--uux-text);font-size:.82rem;font-weight:750;line-height:1.25;box-shadow:inset 0 1px #ffffff0b;overflow:hidden}
+.game-tab[aria-pressed="true"]{border-color:var(--uux-accent);background:linear-gradient(145deg,#163b45,#152237);box-shadow:0 0 0 1px #63f3e933,0 10px 28px #0003;color:#fff}
+.game-tab:after{opacity:.72;transition:transform .2s ease,opacity .2s ease}
+.game-tab:hover:after,.game-tab[aria-pressed="true"]:after{opacity:1;transform:scale(1.06)}
+.panel{width:100%;min-width:0}
+.settings{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field{min-width:0}
+.field select{min-width:0;max-width:100%}
+#tttGame .board,#tttGame .game-board{width:min(100%,440px);margin-inline:auto}
+#brickGame,#shooterGame,#snakeGame{min-width:0}
+#brickGame canvas,#shooterGame canvas{display:block;width:100%;height:auto;max-width:100%;touch-action:manipulation}
+#brickGame .brick-canvas-wrap,#shooterGame .shooter-wrap{width:100%;max-width:100%;min-width:0}
+@media(max-width:760px){
+ .app{width:calc(100% - 24px)}
+ .topline{gap:8px;align-items:center}
+ .topline .pill{font-size:.65rem;padding:7px 9px}
+ .arcade-hero{padding:22px 0 18px}
+ .arcade-hero h1{font-size:clamp(2.35rem,11vw,4rem);line-height:.98}
+ .game-tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .game-tab{min-height:94px;padding:12px;font-size:.82rem}
+ .game-tab:after{top:9px!important;right:10px!important;width:54px!important;height:48px!important}
+ .panel{padding:14px;border-radius:16px}
+ .settings{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .scoregrid{gap:8px}
+ .btn,.tiny,.secondary-btn,.mobile-controls button{min-height:44px}
+ #brickGame .brick-canvas-wrap,#shooterGame .shooter-wrap{margin-inline:auto}
+ #snakeGame .game-card{padding:12px}
+}
+@media(max-width:420px){
+ .app{width:calc(100% - 20px)}
+ .topline .pill{font-size:.58rem;letter-spacing:.04em}
+ .game-tabs{gap:8px}
+ .game-tab{min-height:84px;padding:10px;font-size:.76rem;border-radius:12px}
+ .game-tab:after{width:43px!important;height:40px!important;opacity:.65}
+ .panel{padding:11px}
+ .settings{gap:8px}
+ .field label{font-size:.75rem}
+ .field select{font-size:.82rem;padding:10px 7px}
+ #tttGame .board,#tttGame .game-board{width:min(100%,340px)}
+ #brickGame .brick-controls,#shooterGame .shooter-controls{gap:7px}
+ #brickGame .brick-controls .btn,#shooterGame .shooter-controls .btn{min-width:0;white-space:normal}
+}
+@media(max-width:340px){
+ .settings{grid-template-columns:minmax(0,1fr)}
+ .game-tab{font-size:.7rem}
+}
+
 </style>
 </head>
 <body>
