@@ -248,6 +248,29 @@ h1 .tic{color:#f6f8ff}h1 .tac{color:#63f3e9}h1 .toe{color:#d9ffff}
 @media(max-width:760px){body{padding:16px 12px 28px}.topline{margin-bottom:19px}.hero{margin-bottom:19px}.game-tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.game-tab{min-height:132px;padding:12px;font-size:.73rem}.game-tab:after{top:10px;height:75px}.panel{border-radius:10px}.actions{gap:7px}.btn{font-size:.75rem}}
 @media(max-width:390px){.game-tab{min-height:118px}.game-tab:after{height:65px}.settings{gap:8px}.field select{padding:10px 7px;font-size:.8rem}.actions{grid-template-columns:1fr 1fr}.actions .primary{grid-column:1/-1}}
 
+
+/* Follow-up: keep every playfield full-width and remove legacy sizing conflicts */
+#brickGame .brick-canvas-wrap,
+#shooterGame .shooter-wrap{width:100%;max-width:none;min-width:0}
+#brickGame #brickCanvas{display:block;width:100%;max-width:100%;height:auto;min-height:0;aspect-ratio:600/510}
+#shooterGame .shooter-canvas{display:block;width:100%;max-width:100%;height:auto;min-height:0;aspect-ratio:800/520}
+#brickGame .brick-canvas-wrap{min-height:0}
+#brickGame .brick-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+#brickGame .brick-controls .btn{min-width:0}
+#shooterGame .shooter-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#shooterGame .shooter-controls .btn{min-width:0}
+@media(max-width:680px){
+ #brickGame .brick-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #shooterGame .shooter-controls{grid-template-columns:1fr 1fr}
+ #shooterGame .shooter-controls .btn:first-child{grid-column:1/-1}
+ #brickGame #brickCanvas{aspect-ratio:1/1;min-height:0}
+}
+@media(max-width:390px){
+ #brickGame .brick-controls .btn,#shooterGame .shooter-controls .btn{padding:11px 6px;font-size:.72rem}
+ #brickGame .brick-mission{grid-template-columns:minmax(0,1fr) auto;gap:8px}
+ #brickGame .mission-track{grid-column:1/-1;grid-row:2}
+}
+
 </style>
 </head>
 <body>
