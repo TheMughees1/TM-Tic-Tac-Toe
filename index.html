@@ -21,7 +21,8 @@ button,select{font:inherit}button:focus-visible,select:focus-visible{outline:3px
 @keyframes pop{from{transform:scale(.65) rotate(-8deg);opacity:.4}to{transform:scale(1) rotate(0);opacity:1}}@keyframes winpulse{from{box-shadow:0 0 0 1px #8cffb733,0 0 10px #8cffb722}to{box-shadow:0 0 0 3px #8cffb766,0 0 27px #8cffb755}}
 .meta{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;color:var(--muted);font-size:.72rem;font-weight:750}.streak{color:var(--yellow)}.actions{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:9px;margin-top:16px}.btn{border:0;border-radius:13px;padding:12px 8px;font-weight:950;font-size:.8rem;cursor:pointer;transition:transform .15s,filter .15s}.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}.primary{background:linear-gradient(110deg,var(--yellow),#ffb76a);color:#25142d;box-shadow:0 4px 0 #9b5a43}.secondary{background:#342347;border:1px solid #644a7c;color:var(--text)}.tinyactions{display:flex;gap:8px;margin-top:10px}.tiny{flex:1;background:transparent;color:var(--muted);border:1px solid #4c395f;border-radius:11px;padding:9px;font-size:.74rem;font-weight:850;cursor:pointer}.tiny:hover{border-color:var(--blue);color:var(--text)}.footer{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:18px;color:#8e7da5;font-size:.69rem}.footer strong{color:#c5b0db;letter-spacing:.12em}.badge{color:var(--green)}
 [hidden]{display:none!important}
-@media(max-width:700px){.app{width:100%}#brickCanvas{aspect-ratio:1.02;min-height:340px}.brick-canvas-wrap{border-radius:12px}.brick-head{gap:6px}.brick-stats{gap:6px}}\n@media(max-width:390px){body{padding:18px 10px 26px}.settings{gap:8px}.field select{font-size:.85rem;padding:10px 7px}.panel{border-radius:22px}.board{gap:7px}.cell{border-radius:13px}.actions{grid-template-columns:1fr 1fr}.actions .primary{grid-column:1/-1}.topline{margin-bottom:14px}}
+@media(max-width:700px){.app{width:100%}#brickCanvas{aspect-ratio:1.02;min-height:340px}.brick-canvas-wrap{border-radius:12px}.brick-head{gap:6px}.brick-stats{gap:6px}}
+@media(max-width:390px){body{padding:18px 10px 26px}.settings{gap:8px}.field select{font-size:.85rem;padding:10px 7px}.panel{border-radius:22px}.board{gap:7px}.cell{border-radius:13px}.actions{grid-template-columns:1fr 1fr}.actions .primary{grid-column:1/-1}.topline{margin-bottom:14px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
 /* Arcade game hub + Brick Breaker */
@@ -269,6 +270,27 @@ h1 .tic{color:#f6f8ff}h1 .tac{color:#63f3e9}h1 .toe{color:#d9ffff}
  #brickGame .brick-controls .btn,#shooterGame .shooter-controls .btn{padding:11px 6px;font-size:.72rem}
  #brickGame .brick-mission{grid-template-columns:minmax(0,1fr) auto;gap:8px}
  #brickGame .mission-track{grid-column:1/-1;grid-row:2}
+}
+
+
+
+/* Consistent game workspace: remove nested Snake landing-page chrome */
+#snakeGame .game-shell{width:100%;max-width:none;margin:0;padding:0;background:transparent}
+#snakeGame .topbar,#snakeGame .intro{display:none!important}
+#snakeGame .game-card{width:100%;max-width:none;margin:0}
+#snakeGame .game-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#snakeGame .game-controls button{min-width:0}
+#snakeGame .stage-guide{margin-top:12px}
+#snakeGame .footer{display:none}
+@media(max-width:600px){
+ #snakeGame .game-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #snakeGame .game-controls .primary-btn{grid-column:1/-1}
+ #snakeGame .stats{gap:7px}
+ #snakeGame .game-card{padding:12px}
+}
+@media(max-width:380px){
+ #snakeGame .game-controls button{font-size:.75rem;padding:10px 6px}
+ #snakeGame .stage-guide-grid{grid-template-columns:1fr}
 }
 
 </style>
