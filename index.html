@@ -296,6 +296,55 @@ h1 .tic{color:#f6f8ff}h1 .tac{color:#63f3e9}h1 .toe{color:#d9ffff}
 
 #snakeGame .game-controls #snake-status{grid-column:1/-1;margin:0 0 4px}
 
+
+/* UI/UX Pro Max application pass — semantic tokens, interaction states, responsive rhythm */
+:root{
+ --uux-bg:#090d18;--uux-surface:#172136;--uux-surface-raised:#202b40;
+ --uux-border:#3a4962;--uux-text:#f4f7ff;--uux-muted:#b2bfd2;
+ --uux-accent:#63f3e9;--uux-accent-strong:#b2fff8;
+ --uux-focus:0 0 0 3px #09111c,0 0 0 5px #70f5ec;
+ --uux-space-1:4px;--uux-space-2:8px;--uux-space-3:12px;--uux-space-4:16px;--uux-space-6:24px;
+}
+html{scroll-behavior:smooth}
+body{color:var(--uux-text);overflow-x:hidden}
+button,select,input{font:inherit}
+button,select{touch-action:manipulation}
+button:focus-visible,select:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:0;box-shadow:var(--uux-focus)!important;position:relative;z-index:2}
+button:disabled{cursor:not-allowed;opacity:.55;filter:saturate(.65)}
+.game-tabs{align-items:stretch;gap:var(--uux-space-3)}
+.game-tab{min-height:148px;padding:var(--uux-space-4);line-height:1.35;overflow:hidden}
+.game-tab span,.game-tab strong{position:relative;z-index:1}
+.game-tab:after{pointer-events:none}
+.game-tab:nth-child(1):after{content:"";display:block;left:auto;right:16px;top:18px;width:78px;height:72px;background:linear-gradient(135deg,transparent 44%,#70fff0 45% 52%,transparent 53%),linear-gradient(45deg,transparent 44%,#70fff0 45% 52%,transparent 53%);filter:drop-shadow(0 0 12px #45e8df88)}
+.game-tab:nth-child(2):after{content:"";display:block;left:auto;right:14px;top:20px;width:84px;height:68px;background:radial-gradient(circle at 20% 25%,#ffe4a3 0 4px,transparent 5px),linear-gradient(165deg,transparent 34%,#ffcf80 35% 40%,transparent 41%),linear-gradient(15deg,transparent 48%,#ffab6a 49% 54%,transparent 55%);filter:drop-shadow(0 0 12px #ffad5c77)}
+.game-tab:nth-child(3):after{content:"";display:block;left:auto;right:14px;top:17px;width:84px;height:75px;background:radial-gradient(ellipse at 50% 15%,#e3faff 0 4px,transparent 5px),linear-gradient(180deg,transparent 15%,#81b9ff 16% 25%,transparent 26%),linear-gradient(90deg,transparent 47%,#b5e9ff 48% 53%,transparent 54%);clip-path:polygon(50% 0,63% 35%,100% 65%,62% 62%,58% 100%,42% 100%,38% 62%,0 65%,37% 35%);filter:drop-shadow(0 0 12px #6ca5ff99)}
+.game-tab:nth-child(4):after{content:"";display:block;left:auto;right:16px;top:22px;width:76px;height:64px;background:radial-gradient(circle at 20% 50%,#8dffc6 0 5px,transparent 6px),radial-gradient(circle at 50% 20%,#8dffc6 0 5px,transparent 6px),radial-gradient(circle at 78% 56%,#8dffc6 0 5px,transparent 6px),linear-gradient(135deg,transparent 46%,#8dffc6 47% 51%,transparent 52%);filter:drop-shadow(0 0 12px #53e7a177)}
+.game-tab:hover{transform:translateY(-2px)}
+.game-tab:active{transform:translateY(0) scale(.99)}
+.panel,.game-card,.brick-mission,.brick-achievements>div{min-width:0}
+.field select{min-height:44px;width:100%}
+.btn,.tiny,.secondary-btn,.mobile-controls button{min-height:44px}
+.mobile-controls button{min-width:44px}
+.cell{min-width:0;min-height:0;aspect-ratio:1}
+#brickGame .brick-canvas-wrap,#shooterGame .shooter-wrap{width:100%;max-width:100%;min-width:0;overflow:hidden}
+#brickGame canvas,#shooterGame canvas{max-width:100%}
+@media(max-width:760px){
+ body{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right));padding-bottom:max(24px,env(safe-area-inset-bottom))}
+ .game-tabs{gap:var(--uux-space-2)}
+ .game-tab{min-height:132px;padding:12px;font-size:.78rem}
+ .panel{padding:16px}
+ .field label{font-size:.82rem}
+}
+@media(max-width:380px){
+ .game-tab{min-height:116px;padding:10px;font-size:.74rem}
+ .game-tab:nth-child(n):after{right:9px;top:12px;width:62px;height:55px}
+ .panel{padding:12px}
+}
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+
 </style>
 </head>
 <body>
