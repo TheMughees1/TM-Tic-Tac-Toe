@@ -745,7 +745,7 @@ reset();
   ];
 
   let snake, food, specialFood, specialTicks, slowTicks, obstacles, direction, nextDirection, score, stageApples, timer;
-  let running = false, paused = false, ended = false, soundOn = true, audioContext = null, currentStage = 0, toastTimer;
+  let running = false, paused = false, ended = false, soundOn = true, audioContext = null, currentStage = 0, toastTimer, turnLocked = false;
   let difficulty = "normal";
   let best = 0, totalApples = 0, gamesPlayed = 0, stagesCleared = 0;
   try { totalApples = Number(localStorage.getItem("tm-snake-apples")) || 0; gamesPlayed = Number(localStorage.getItem("tm-snake-games")) || 0; stagesCleared = Number(localStorage.getItem("tm-snake-stages")) || 0; } catch (_) {}
@@ -795,14 +795,21 @@ reset();
     soundBtn.setAttribute("aria-pressed", String(soundOn));
   }
   function randomFreeCell() {
-    let candidate;
-    do {
-      candidate = {x:Math.floor(Math.random()*cells),y:Math.floor(Math.random()*cells)};
-    } while (snake.some(p=>p.x===candidate.x&&p.y===candidate.y) || (obstacles||[]).some(p=>p.x===candidate.x&&p.y===candidate.y) || (specialFood&&specialFood.x===candidate.x&&specialFood.y===candidate.y));
-    return candidate;
+    const occupied = (x,y) => snake.some(p=>p.x===x&&p.y===y) ||
+      (obstacles||[]).some(p=>p.x===x&&p.y===y) ||
+      (specialFood&&specialFood.x===x&&specialFood.y===y);
+    for (let attempt=0; attempt<cells*cells; attempt++) {
+      const x=Math.floor(Math.random()*cells), y=Math.floor(Math.random()*cells);
+      if (!occupied(x,y)) return {x,y};
+    }
+    // Deterministic fallback guarantees termination even on a nearly full board.
+    for (let y=0;y<cells;y++) for (let x=0;x<cells;x++) if (!occupied(x,y)) return {x,y};
+    return null;
   }
   function spawnSpecialFood() {
-    specialFood = {...randomFreeCell(), type: Math.random() < 0.65 ? "gold" : "slow"};
+    const cell = randomFreeCell();
+    if (!cell) return;
+    specialFood = {...cell, type: Math.random() < 0.65 ? "gold" : "slow"};
     specialTicks = 35;
     status.innerHTML = '<span class="status-dot"></span> A special item appeared — grab it!';
   }
@@ -855,7 +862,7 @@ reset();
     difficulty = difficultySelect.value || "normal";
     difficultyLabel.textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
     snake = [{x:9,y:10},{x:8,y:10},{x:7,y:10}];
-    direction = {x:1,y:0}; nextDirection = {x:1,y:0};
+    direction = {x:1,y:0}; nextDirection = {x:1,y:0}; turnLocked = false;
     score = 0; stageApples = 0; currentStage = 0; running = false; paused = false; ended = false;
     specialFood = null; specialTicks = 0; slowTicks = 0;
     obstacles = []; buildObstacles(); food = randomFreeCell();
@@ -904,6 +911,7 @@ reset();
   }
   function tick() {
     direction = nextDirection;
+    turnLocked = false;
     const head = {x:snake[0].x+direction.x,y:snake[0].y+direction.y};
     const eating = head.x===food.x&&head.y===food.y;
     const eatingSpecial = !!specialFood && head.x===specialFood.x && head.y===specialFood.y;
@@ -962,7 +970,17 @@ reset();
     draw();
   }
   function roundedRect(x,y,width,height,radius) {
-    ctx.beginPath(); ctx.roundRect(x,y,width,height,radius); ctx.fill();
+    const r=Math.max(0,Math.min(radius,width/2,height/2));
+    ctx.beginPath();
+    if (typeof ctx.roundRect === "function") {
+      ctx.roundRect(x,y,width,height,r);
+    } else {
+      ctx.moveTo(x+r,y); ctx.lineTo(x+width-r,y); ctx.quadraticCurveTo(x+width,y,x+width,y+r);
+      ctx.lineTo(x+width,y+height-r); ctx.quadraticCurveTo(x+width,y+height,x+width-r,y+height);
+      ctx.lineTo(x+r,y+height); ctx.quadraticCurveTo(x,y+height,x,y+height-r);
+      ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
+    }
+    ctx.closePath(); ctx.fill();
   }
   function drawBackground(stage) {
     const bg = ctx.createLinearGradient(0,0,canvas.width,canvas.height);
@@ -1067,14 +1085,19 @@ reset();
   function changeDirection(name) {
     const vectors={up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}};
     const candidate=vectors[name];
-    if(!candidate||(candidate.x===-direction.x&&candidate.y===-direction.y))return;
+    if(!candidate||turnLocked||(candidate.x===-direction.x&&candidate.y===-direction.y)||
+       (candidate.x===direction.x&&candidate.y===direction.y))return;
     nextDirection=candidate;
+    turnLocked=true;
   }
   document.addEventListener("keydown",event=>{
     if(document.getElementById("snakeGame").hidden)return;
+    const target=event.target;
+    const editing=target && (target.matches("input,select,textarea,[contenteditable='true']") || target.isContentEditable);
+    if(editing)return;
     const keys={ArrowUp:"up",w:"up",W:"up",ArrowDown:"down",s:"down",S:"down",ArrowLeft:"left",a:"left",A:"left",ArrowRight:"right",d:"right",D:"right"};
     if(keys[event.key]){event.preventDefault();changeDirection(keys[event.key]);}
-    if(event.key===" "){event.preventDefault();if(running)pause();else start();}
+    if(event.key===" " && !(target && target.matches("button,a,[role='button']"))){event.preventDefault();if(running)pause();else start();}
     if(event.key==="Escape" && running) pause();
   });
   document.querySelectorAll("[data-dir]").forEach(button=>button.addEventListener("click",()=>{
