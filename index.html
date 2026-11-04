@@ -813,6 +813,12 @@ reset();
     specialTicks = 35;
     status.innerHTML = '<span class="status-dot"></span> A special item appeared — grab it!';
   }
+  function placeFood() {
+    food = randomFreeCell();
+    if (food) return true;
+    finish(true);
+    return false;
+  }
   function saveStat(key, value) { try { localStorage.setItem(key, String(value)); } catch (_) {} }
   function buildObstacles() {
     obstacles = [];
@@ -921,9 +927,8 @@ reset();
     const hitObstacle = obstacles.some(p=>p.x===head.x&&p.y===head.y);
     if (hitWall||hitBody||hitObstacle) return finish();
     snake.unshift(head);
-    if (specialTicks > 0) { specialTicks--; if (specialTicks === 0) specialFood = null; }
-    if (slowTicks > 0) { slowTicks--; if (slowTicks === 0) tickLoop(); }
     if (eatingSpecial) {
+      // Resolve pickup before the lifetime countdown so the final-frame pickup is not lost.
       const item = specialFood.type; specialFood = null; specialTicks = 0;
       if (item === "gold") {
         score += 5; scoreEl.textContent = formatScore(score);
@@ -932,15 +937,14 @@ reset();
       } else if (item === "slow") {
         slowTicks = 30; status.innerHTML = '<span class="status-dot"></span> Slow Time active — easier steering for a short while!';
         playTone(430,.14,"triangle",.04, -180);
-      } else {
-        shieldActive = true; shieldCollected = true;
-        status.innerHTML = '<span class="status-dot"></span> Shield activated — it will block your next collision!';
-        playTone(760,.18,"sine",.05,320);
       }
       updateAchievements();
       if (score > best) { best = score; bestEl.textContent = formatScore(best); saveStat("tm-snake-best", best); }
       tickLoop();
+    } else if (specialTicks > 0 && --specialTicks === 0) {
+      specialFood = null;
     }
+    if (slowTicks > 0) { slowTicks--; if (slowTicks === 0) tickLoop(); }
     if (eating) {
       score++; stageApples++; totalApples++; saveStat("tm-snake-apples", totalApples); updateLifetimeStats(); updateSkinOptions(); scoreEl.textContent = formatScore(score);
       updateAchievements();
@@ -956,7 +960,7 @@ reset();
           stagesCleared++; saveStat("tm-snake-stages", stagesCleared); updateLifetimeStats();
           currentStage++;
           buildObstacles();
-          food = randomFreeCell();
+          if (!placeFood()) return;
           setStageUI(); showStageToast(); playStageUp();
           status.innerHTML = '<span class="status-dot"></span> New world unlocked: '+stages[currentStage].name;
         } else {
@@ -964,7 +968,7 @@ reset();
           finish(true);
           return;
         }
-      } else food = randomFreeCell();
+      } else if (!placeFood()) return;
       setStageUI(); tickLoop();
     } else snake.pop();
     draw();
@@ -1034,6 +1038,7 @@ reset();
     }
   }
   function drawFood() {
+    if (!food) return;
     if (specialFood) {
       const sx=(specialFood.x+.5)*cellSize, sy=(specialFood.y+.5)*cellSize;
       ctx.save();
